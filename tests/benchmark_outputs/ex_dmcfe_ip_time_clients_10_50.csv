@@ -1,0 +1,46 @@
+clients,threshold,stage,time_ms
+10,5,Global Setup,105.89
+10,5,Client Setup,0.012
+10,5,Agree on weight Y,0.013
+10,5,Key Sharing,0.855
+10,5,Encryption,0.113
+10,5,Verify weight Y,0.069
+10,5,Aggregation,0.325
+10,5,Client aggregation total,0.981
+10,5,Server aggregation total,0.394
+20,10,Global Setup,92.647
+20,10,Client Setup,0.012
+20,10,Agree on weight Y,0.01
+20,10,Key Sharing,0.96
+20,10,Encryption,0.181
+20,10,Verify weight Y,0.198
+20,10,Aggregation,0.916
+20,10,Client aggregation total,1.151
+20,10,Server aggregation total,1.114
+30,15,Global Setup,104.676
+30,15,Client Setup,0.012
+30,15,Agree on weight Y,0.009
+30,15,Key Sharing,1.124
+30,15,Encryption,0.254
+30,15,Verify weight Y,0.328
+30,15,Aggregation,1.619
+30,15,Client aggregation total,1.387
+30,15,Server aggregation total,1.947
+40,20,Global Setup,98.189
+40,20,Client Setup,0.012
+40,20,Agree on weight Y,0.009
+40,20,Key Sharing,1.355
+40,20,Encryption,0.332
+40,20,Verify weight Y,0.465
+40,20,Aggregation,2.499
+40,20,Client aggregation total,1.696
+40,20,Server aggregation total,2.964
+50,25,Global Setup,88.106
+50,25,Client Setup,0.012
+50,25,Agree on weight Y,0.009
+50,25,Key Sharing,1.664
+50,25,Encryption,0.399
+50,25,Verify weight Y,0.581
+50,25,Aggregation,3.455
+50,25,Client aggregation total,2.072
+50,25,Server aggregation total,4.036

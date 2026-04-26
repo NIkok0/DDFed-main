@@ -1,0 +1,121 @@
+scheme,drop_rate,clients,stage,time_ms
+rodot_plus,10,10,Setup,70.867
+rodot_plus,10,10,KGen,0.003
+rodot_plus,10,10,DKShare,0.438
+rodot_plus,10,10,Enc,0.106
+rodot_plus,10,10,DKCom,0.001
+rodot_plus,10,10,ParDec,0.134
+rodot_plus,10,10,ComDec,0.109
+rodot_plus,10,10,Total pipeline,71.658
+rodot_plus,10,20,Setup,74.625
+rodot_plus,10,20,KGen,0.002
+rodot_plus,10,20,DKShare,0.477
+rodot_plus,10,20,Enc,0.11
+rodot_plus,10,20,DKCom,0.001
+rodot_plus,10,20,ParDec,0.157
+rodot_plus,10,20,ComDec,0.403
+rodot_plus,10,20,Total pipeline,75.776
+rodot_plus,10,30,Setup,63.955
+rodot_plus,10,30,KGen,0.002
+rodot_plus,10,30,DKShare,0.55
+rodot_plus,10,30,Enc,0.117
+rodot_plus,10,30,DKCom,0.002
+rodot_plus,10,30,ParDec,0.181
+rodot_plus,10,30,ComDec,0.906
+rodot_plus,10,30,Total pipeline,65.712
+rodot_plus,10,40,Setup,71.015
+rodot_plus,10,40,KGen,0.002
+rodot_plus,10,40,DKShare,0.632
+rodot_plus,10,40,Enc,0.123
+rodot_plus,10,40,DKCom,0.002
+rodot_plus,10,40,ParDec,0.206
+rodot_plus,10,40,ComDec,1.67
+rodot_plus,10,40,Total pipeline,73.65
+rodot_plus,10,50,Setup,70.281
+rodot_plus,10,50,KGen,0.002
+rodot_plus,10,50,DKShare,0.746
+rodot_plus,10,50,Enc,0.132
+rodot_plus,10,50,DKCom,0.003
+rodot_plus,10,50,ParDec,0.236
+rodot_plus,10,50,ComDec,2.721
+rodot_plus,10,50,Total pipeline,74.122
+rodot_plus,20,10,Setup,68.434
+rodot_plus,20,10,KGen,0.003
+rodot_plus,20,10,DKShare,0.448
+rodot_plus,20,10,Enc,0.106
+rodot_plus,20,10,DKCom,0.001
+rodot_plus,20,10,ParDec,0.138
+rodot_plus,20,10,ComDec,0.117
+rodot_plus,20,10,Total pipeline,69.247
+rodot_plus,20,20,Setup,64.205
+rodot_plus,20,20,KGen,0.002
+rodot_plus,20,20,DKShare,0.487
+rodot_plus,20,20,Enc,0.113
+rodot_plus,20,20,DKCom,0.001
+rodot_plus,20,20,ParDec,0.158
+rodot_plus,20,20,ComDec,0.404
+rodot_plus,20,20,Total pipeline,65.371
+rodot_plus,20,30,Setup,69.499
+rodot_plus,20,30,KGen,0.002
+rodot_plus,20,30,DKShare,0.553
+rodot_plus,20,30,Enc,0.119
+rodot_plus,20,30,DKCom,0.002
+rodot_plus,20,30,ParDec,0.181
+rodot_plus,20,30,ComDec,0.93
+rodot_plus,20,30,Total pipeline,71.285
+rodot_plus,20,40,Setup,62.618
+rodot_plus,20,40,KGen,0.002
+rodot_plus,20,40,DKShare,0.627
+rodot_plus,20,40,Enc,0.124
+rodot_plus,20,40,DKCom,0.002
+rodot_plus,20,40,ParDec,0.205
+rodot_plus,20,40,ComDec,1.658
+rodot_plus,20,40,Total pipeline,65.235
+rodot_plus,20,50,Setup,73.248
+rodot_plus,20,50,KGen,0.002
+rodot_plus,20,50,DKShare,0.75
+rodot_plus,20,50,Enc,0.132
+rodot_plus,20,50,DKCom,0.003
+rodot_plus,20,50,ParDec,0.234
+rodot_plus,20,50,ComDec,2.697
+rodot_plus,20,50,Total pipeline,77.066
+rodot_plus,30,10,Setup,69.953
+rodot_plus,30,10,KGen,0.003
+rodot_plus,30,10,DKShare,0.44
+rodot_plus,30,10,Enc,0.108
+rodot_plus,30,10,DKCom,0.001
+rodot_plus,30,10,ParDec,0.135
+rodot_plus,30,10,ComDec,0.112
+rodot_plus,30,10,Total pipeline,70.752
+rodot_plus,30,20,Setup,68.165
+rodot_plus,30,20,KGen,0.002
+rodot_plus,30,20,DKShare,0.481
+rodot_plus,30,20,Enc,0.112
+rodot_plus,30,20,DKCom,0.001
+rodot_plus,30,20,ParDec,0.152
+rodot_plus,30,20,ComDec,0.399
+rodot_plus,30,20,Total pipeline,69.311
+rodot_plus,30,30,Setup,60.381
+rodot_plus,30,30,KGen,0.002
+rodot_plus,30,30,DKShare,0.547
+rodot_plus,30,30,Enc,0.116
+rodot_plus,30,30,DKCom,0.002
+rodot_plus,30,30,ParDec,0.179
+rodot_plus,30,30,ComDec,0.915
+rodot_plus,30,30,Total pipeline,62.142
+rodot_plus,30,40,Setup,63.429
+rodot_plus,30,40,KGen,0.002
+rodot_plus,30,40,DKShare,0.61
+rodot_plus,30,40,Enc,0.12
+rodot_plus,30,40,DKCom,0.002
+rodot_plus,30,40,ParDec,0.194
+rodot_plus,30,40,ComDec,1.597
+rodot_plus,30,40,Total pipeline,65.953
+rodot_plus,30,50,Setup,69.145
+rodot_plus,30,50,KGen,0.002
+rodot_plus,30,50,DKShare,0.724
+rodot_plus,30,50,Enc,0.129
+rodot_plus,30,50,DKCom,0.003
+rodot_plus,30,50,ParDec,0.221
+rodot_plus,30,50,ComDec,2.607
+rodot_plus,30,50,Total pipeline,72.829

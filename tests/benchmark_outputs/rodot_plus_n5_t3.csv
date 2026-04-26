@@ -1,0 +1,9 @@
+scheme,n,t,stage,time_ms
+rodot_plus,5,3,Setup,55.796
+rodot_plus,5,3,KGen,0.004
+rodot_plus,5,3,DKShare,0.426
+rodot_plus,5,3,Enc,0.106
+rodot_plus,5,3,DKCom,0.001
+rodot_plus,5,3,ParDec,0.125
+rodot_plus,5,3,ComDec,0.022
+rodot_plus,5,3,Total pipeline,56.48

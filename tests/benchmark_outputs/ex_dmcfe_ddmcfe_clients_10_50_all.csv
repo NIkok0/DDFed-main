@@ -1,0 +1,81 @@
+clients,threshold,stage,time_ms,scheme
+10,5,Global Setup,105.89,dmcfe_ip
+10,5,Client Setup,0.012,dmcfe_ip
+10,5,Agree on weight Y,0.013,dmcfe_ip
+10,5,Key Sharing,0.855,dmcfe_ip
+10,5,Encryption,0.113,dmcfe_ip
+10,5,Verify weight Y,0.069,dmcfe_ip
+10,5,Aggregation,0.325,dmcfe_ip
+10,5,Client aggregation total,0.981,dmcfe_ip
+10,5,Server aggregation total,0.394,dmcfe_ip
+20,10,Global Setup,92.647,dmcfe_ip
+20,10,Client Setup,0.012,dmcfe_ip
+20,10,Agree on weight Y,0.01,dmcfe_ip
+20,10,Key Sharing,0.96,dmcfe_ip
+20,10,Encryption,0.181,dmcfe_ip
+20,10,Verify weight Y,0.198,dmcfe_ip
+20,10,Aggregation,0.916,dmcfe_ip
+20,10,Client aggregation total,1.151,dmcfe_ip
+20,10,Server aggregation total,1.114,dmcfe_ip
+30,15,Global Setup,104.676,dmcfe_ip
+30,15,Client Setup,0.012,dmcfe_ip
+30,15,Agree on weight Y,0.009,dmcfe_ip
+30,15,Key Sharing,1.124,dmcfe_ip
+30,15,Encryption,0.254,dmcfe_ip
+30,15,Verify weight Y,0.328,dmcfe_ip
+30,15,Aggregation,1.619,dmcfe_ip
+30,15,Client aggregation total,1.387,dmcfe_ip
+30,15,Server aggregation total,1.947,dmcfe_ip
+40,20,Global Setup,98.189,dmcfe_ip
+40,20,Client Setup,0.012,dmcfe_ip
+40,20,Agree on weight Y,0.009,dmcfe_ip
+40,20,Key Sharing,1.355,dmcfe_ip
+40,20,Encryption,0.332,dmcfe_ip
+40,20,Verify weight Y,0.465,dmcfe_ip
+40,20,Aggregation,2.499,dmcfe_ip
+40,20,Client aggregation total,1.696,dmcfe_ip
+40,20,Server aggregation total,2.964,dmcfe_ip
+50,25,Global Setup,88.106,dmcfe_ip
+50,25,Client Setup,0.012,dmcfe_ip
+50,25,Agree on weight Y,0.009,dmcfe_ip
+50,25,Key Sharing,1.664,dmcfe_ip
+50,25,Encryption,0.399,dmcfe_ip
+50,25,Verify weight Y,0.581,dmcfe_ip
+50,25,Aggregation,3.455,dmcfe_ip
+50,25,Client aggregation total,2.072,dmcfe_ip
+50,25,Server aggregation total,4.036,dmcfe_ip
+10,5,Setup,0.001,ddmcfe
+10,5,KeyGen,0.005,ddmcfe
+10,5,Encrypt,0.006,ddmcfe
+10,5,DKGenShare,0.035,ddmcfe
+10,5,DKComb,0.069,ddmcfe
+10,5,Decrypt,0.221,ddmcfe
+10,5,Total pipeline,0.337,ddmcfe
+20,10,Setup,0.001,ddmcfe
+20,10,KeyGen,0.005,ddmcfe
+20,10,Encrypt,0.006,ddmcfe
+20,10,DKGenShare,0.044,ddmcfe
+20,10,DKComb,0.119,ddmcfe
+20,10,Decrypt,0.24,ddmcfe
+20,10,Total pipeline,0.415,ddmcfe
+30,15,Setup,0.001,ddmcfe
+30,15,KeyGen,0.005,ddmcfe
+30,15,Encrypt,0.006,ddmcfe
+30,15,DKGenShare,0.05,ddmcfe
+30,15,DKComb,0.17,ddmcfe
+30,15,Decrypt,0.254,ddmcfe
+30,15,Total pipeline,0.486,ddmcfe
+40,20,Setup,0.001,ddmcfe
+40,20,KeyGen,0.005,ddmcfe
+40,20,Encrypt,0.006,ddmcfe
+40,20,DKGenShare,0.058,ddmcfe
+40,20,DKComb,0.215,ddmcfe
+40,20,Decrypt,0.292,ddmcfe
+40,20,Total pipeline,0.577,ddmcfe
+50,25,Setup,0.001,ddmcfe
+50,25,KeyGen,0.005,ddmcfe
+50,25,Encrypt,0.006,ddmcfe
+50,25,DKGenShare,0.071,ddmcfe
+50,25,DKComb,0.281,ddmcfe
+50,25,Decrypt,0.316,ddmcfe
+50,25,Total pipeline,0.6799999999999999,ddmcfe

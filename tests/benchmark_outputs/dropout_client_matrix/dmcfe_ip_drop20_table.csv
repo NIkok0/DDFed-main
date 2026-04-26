@@ -1,0 +1,10 @@
+﻿stage,10,20,30,40,50
+Global Setup,107.537,103.973,97.748,104.947,96.269
+Client Setup,0.013,0.013,0.012,0.012,0.013
+Client: Step 1 Agree on weight Y,0.012,0.01,0.01,0.009,0.009
+Client: Step 2 Key Sharing,0.901,0.984,1.143,1.374,1.677
+Client: Step 3 Encryption,0.119,0.191,0.261,0.332,0.408
+Server: Step 1 Verify weight Y,0.113,0.22,0.32,0.43,0.56
+Server: Step 4 Aggregation,0.238,0.813,1.923,3.805,6.497
+Client Aggregation Phase Total,1.032,1.185,1.414,1.715,2.094
+Server Aggregation Phase Total,0.351,1.033,2.243,4.235,7.057

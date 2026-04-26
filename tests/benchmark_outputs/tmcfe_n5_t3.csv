@@ -1,0 +1,8 @@
+scheme,n,t,stage,time_ms
+tmcfe,5,3,Setup,32.817
+tmcfe,5,3,SKDistribute,0.033
+tmcfe,5,3,DKGenerate,2.57
+tmcfe,5,3,Encrypt,0.022
+tmcfe,5,3,ShareDecrypt,0.043
+tmcfe,5,3,CombineDecrypt,0.73
+tmcfe,5,3,Total pipeline,36.215
