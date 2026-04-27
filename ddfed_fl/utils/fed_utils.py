@@ -2,6 +2,9 @@ import time
 import os
 import string
 import itertools
+import shutil
+import zipfile
+import urllib.request
 import numpy as np
 import pandas
 from torch.utils.data import Dataset
@@ -71,6 +74,71 @@ def to_tensor(data_pairs: dict):
     data_pairs['y'] = torch.tensor(data_pairs['y'], dtype=torch.int64)
 
 
+def _download_with_progress(url: str, dst_path: str):
+    os.makedirs(os.path.dirname(dst_path), exist_ok=True)
+    with tqdm(unit="B", unit_scale=True, unit_divisor=1024, miniters=1, desc=os.path.basename(dst_path)) as pbar:
+        last = [0]
+
+        def _hook(block_num, block_size, total_size):
+            if total_size > 0:
+                pbar.total = total_size
+            downloaded = block_num * block_size
+            pbar.update(downloaded - last[0])
+            last[0] = downloaded
+
+        urllib.request.urlretrieve(url, dst_path, _hook)
+
+
+def _ensure_tiny_imagenet_downloaded(data_path: str) -> str:
+    tiny_root = os.path.join(data_path, "tiny-imagenet-200")
+    if os.path.isdir(tiny_root):
+        return tiny_root
+
+    os.makedirs(data_path, exist_ok=True)
+    zip_path = os.path.join(data_path, "tiny-imagenet-200.zip")
+    if not os.path.isfile(zip_path):
+        print(f"{get_time()} TinyImageNet archive not found, downloading...")
+        _download_with_progress("http://cs231n.stanford.edu/tiny-imagenet-200.zip", zip_path)
+
+    print(f"{get_time()} Extracting TinyImageNet archive...")
+    with zipfile.ZipFile(zip_path, "r") as zf:
+        zf.extractall(data_path)
+    if not os.path.isdir(tiny_root):
+        raise RuntimeError(f"TinyImageNet extraction failed, missing directory: {tiny_root}")
+    return tiny_root
+
+
+def _prepare_tiny_imagenet_val_split(tiny_root: str) -> str:
+    val_root = os.path.join(tiny_root, "val")
+    marker_file = os.path.join(val_root, ".images_by_class_ready")
+    val_images_by_class = os.path.join(val_root, "images_by_class")
+    if os.path.isfile(marker_file) and os.path.isdir(val_images_by_class):
+        return val_images_by_class
+
+    val_images = os.path.join(val_root, "images")
+    val_ann = os.path.join(val_root, "val_annotations.txt")
+    if not os.path.isfile(val_ann):
+        raise RuntimeError(f"TinyImageNet validation annotation missing: {val_ann}")
+
+    os.makedirs(val_images_by_class, exist_ok=True)
+    with open(val_ann, "r", encoding="utf-8") as f:
+        for line in f:
+            parts = line.strip().split("\t")
+            if len(parts) < 2:
+                continue
+            img_name, wnid = parts[0], parts[1]
+            src = os.path.join(val_images, img_name)
+            dst_dir = os.path.join(val_images_by_class, wnid)
+            dst = os.path.join(dst_dir, img_name)
+            os.makedirs(dst_dir, exist_ok=True)
+            if not os.path.isfile(dst):
+                shutil.copy2(src, dst)
+
+    with open(marker_file, "w", encoding="utf-8") as f:
+        f.write("ready\n")
+    return val_images_by_class
+
+
 def get_dataset(dataset, data_path):
     if dataset == 'MNIST':
         channel = 1
@@ -136,46 +204,13 @@ def get_dataset(dataset, data_path):
         num_classes = 200
         mean = [0.485, 0.456, 0.406]
         std = [0.229, 0.224, 0.225]
-        data = torch.load(os.path.join(data_path, 'tinyimagenet.pt'), map_location='cpu')
-
-        class_names = data['classes']
-
-        images_train = data['images_train']
-        labels_train = data['labels_train']
-        images_train = images_train.detach().float() / 255.0
-        labels_train = labels_train.detach()
-        for c in range(channel):
-            images_train[:,c] = (images_train[:,c] - mean[c])/std[c]
-        dst_train = TensorDataset(images_train, labels_train)  # no augmentation
-
-        images_val = data['images_val']
-        labels_val = data['labels_val']
-        images_val = images_val.detach().float() / 255.0
-        labels_val = labels_val.detach()
-
-        for c in range(channel):
-            images_val[:, c] = (images_val[:, c] - mean[c]) / std[c]
-
-        dst_test = TensorDataset(images_val, labels_val)  # no augmentation
-
-    elif dataset == 'FEMNIST':
-        channel = 1
-        im_size = (28, 28)
-        num_classes = 62
-        # mnist properties:
-        mean = [88.94]
-        std = [0.39]
-        train_data = torch.load(os.path.join(data_path, 'femnist', 'train.pt'), map_location='cpu')
-        test_data = torch.load(os.path.join(data_path, 'femnist', 'test.pt'), map_location='cpu')
-        dst_train = TensorDataset(train_data[0], train_data[1])  # no augmentation
-        dst_test = TensorDataset(test_data[0], test_data[1])  # no augmentation
-        mnist_class_names = [str(c) for c in range(num_classes)]
-        lowercase_class_names = [cn for cn in string.ascii_lowercase[:]]
-        uppercase_class_names = [cn for cn in string.ascii_uppercase[:]]
-        class_names = []
-        class_names.extend(mnist_class_names)
-        class_names.extend(lowercase_class_names)
-        class_names.extend(uppercase_class_names)
+        transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean=mean, std=std)])
+        tiny_root = _ensure_tiny_imagenet_downloaded(data_path)
+        val_images_by_class = _prepare_tiny_imagenet_val_split(tiny_root)
+        train_dir = os.path.join(tiny_root, "train")
+        dst_train = datasets.ImageFolder(train_dir, transform=transform)
+        dst_test = datasets.ImageFolder(val_images_by_class, transform=transform)
+        class_names = dst_train.classes
 
     else:
         exit('unknown dataset: %s'%dataset)
