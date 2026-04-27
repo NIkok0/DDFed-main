@@ -1,5 +1,6 @@
 # Python 编译文件
 __pycache__/
+**/__pycache__/
 *.py[cod]
 *$py.class
 
@@ -13,3 +14,9 @@ ENV/
 .idea/
 .vscode/
 *.swp
+
+# 实验/产出数据（避免仓库过大）
+data/
+results/
+**/data/
+**/results/
