@@ -210,22 +210,41 @@ def run_scheme_matrix(scheme: str, script_name: str, original_config: str):
     return pd.DataFrame(rows)
 
 
-def run_single_case(scheme: str, script_name: str, n: int, t: int, original_config: str):
-    config_text = update_config(
-        original_config,
-        {
-            "N_ENCRYPTORS": n,
-            "N_DECRYPTORS": n,
-            "T_THRESHOLD": t,
-        },
-    )
-    CONFIG_PATH.write_text(config_text, encoding="utf-8")
-    env = {"NUM_ITERATIONS_OVERRIDE": str(ITERATIONS)}
-    stdout_text = run_script(script_name, env_override=env)
-    log_path = OUT_DIR / f"{scheme}_n{n}_t{t}.log.txt"
-    log_path.write_text(stdout_text, encoding="utf-8")
-    labels, values = parse_tmcfe(stdout_text) if scheme == "tmcfe" else parse_rodot(stdout_text)
-    return pd.DataFrame({"scheme": scheme, "n": n, "t": t, "stage": labels, "time_ms": values})
+def run_fixed_decryptor_matrix(
+    scheme: str,
+    script_name: str,
+    n_decryptors: int,
+    t_threshold: int,
+    original_config: str,
+):
+    rows = []
+    for n_encryptors in CLIENT_COUNTS:
+        config_text = update_config(
+            original_config,
+            {
+                "N_ENCRYPTORS": n_encryptors,
+                "N_DECRYPTORS": n_decryptors,
+                "T_THRESHOLD": t_threshold,
+            },
+        )
+        CONFIG_PATH.write_text(config_text, encoding="utf-8")
+        env = {"NUM_ITERATIONS_OVERRIDE": str(ITERATIONS)}
+        stdout_text = run_script(script_name, env_override=env)
+        log_path = OUT_DIR / f"{scheme}_enc{n_encryptors}_n{n_decryptors}_t{t_threshold}.log.txt"
+        log_path.write_text(stdout_text, encoding="utf-8")
+        labels, values = parse_tmcfe(stdout_text) if scheme == "tmcfe" else parse_rodot(stdout_text)
+        for stage, time_ms in zip(labels, values):
+            rows.append(
+                {
+                    "scheme": scheme,
+                    "n": n_encryptors,
+                    "n_decryptors": n_decryptors,
+                    "t": t_threshold,
+                    "stage": stage,
+                    "time_ms": time_ms,
+                }
+            )
+    return pd.DataFrame(rows)
 
 
 def main():
@@ -233,7 +252,7 @@ def main():
     parser.add_argument(
         "--fixed-four",
         action="store_true",
-        help="Run fixed four cases: tmcfe(5,3), tmcfe(10,6), rodot_plus(5,3), rodot_plus(10,6).",
+        help="Run four cases with fixed decryptor settings and varying clients (10..50).",
     )
     args = parser.parse_args()
 
@@ -250,12 +269,17 @@ def main():
         outputs = []
         try:
             for scheme, script, n, t, order in cases:
-                print(f"[RUN] {scheme} (n={n}, t={t})")
-                df = run_single_case(scheme, script, n, t, original_config)
-                csv_path = OUT_DIR / f"{scheme}_n{n}_t{t}.csv"
-                png_path = OUT_DIR / f"{scheme}_n{n}_t{t}.png"
+                print(f"[RUN] {scheme} (n={n}, t={t}), clients={CLIENT_COUNTS}")
+                df = run_fixed_decryptor_matrix(scheme, script, n, t, original_config)
+                csv_path = OUT_DIR / f"{scheme}_n{n}_t{t}_clients_10_50.csv"
+                png_path = OUT_DIR / f"{scheme}_n{n}_t{t}_clients_10_50.png"
                 df.to_csv(csv_path, index=False)
-                save_single_case_plot(df, f"{scheme.upper()} (n={n}, t={t})", png_path, order)
+                save_plot(
+                    df,
+                    f"{scheme.upper()} times vs clients (n={n}, t={t})",
+                    png_path,
+                    order,
+                )
                 outputs.append((csv_path, png_path))
         finally:
             CONFIG_PATH.write_text(original_config, encoding="utf-8")

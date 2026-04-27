@@ -1,0 +1,41 @@
+scheme,n,n_decryptors,t,stage,time_ms
+rodot_plus,10,10,6,Setup,59.155
+rodot_plus,10,10,6,KGen,0.003
+rodot_plus,10,10,6,DKShare,0.415
+rodot_plus,10,10,6,Enc,0.099
+rodot_plus,10,10,6,DKCom,0.001
+rodot_plus,10,10,6,ParDec,0.126
+rodot_plus,10,10,6,ComDec,0.076
+rodot_plus,10,10,6,Total pipeline,59.874
+rodot_plus,20,10,6,Setup,62.497
+rodot_plus,20,10,6,KGen,0.002
+rodot_plus,20,10,6,DKShare,0.427
+rodot_plus,20,10,6,Enc,0.1
+rodot_plus,20,10,6,DKCom,0.001
+rodot_plus,20,10,6,ParDec,0.137
+rodot_plus,20,10,6,ComDec,0.079
+rodot_plus,20,10,6,Total pipeline,63.243
+rodot_plus,30,10,6,Setup,62.839
+rodot_plus,30,10,6,KGen,0.002
+rodot_plus,30,10,6,DKShare,0.446
+rodot_plus,30,10,6,Enc,0.106
+rodot_plus,30,10,6,DKCom,0.002
+rodot_plus,30,10,6,ParDec,0.154
+rodot_plus,30,10,6,ComDec,0.089
+rodot_plus,30,10,6,Total pipeline,63.639
+rodot_plus,40,10,6,Setup,69.789
+rodot_plus,40,10,6,KGen,0.002
+rodot_plus,40,10,6,DKShare,0.445
+rodot_plus,40,10,6,Enc,0.105
+rodot_plus,40,10,6,DKCom,0.002
+rodot_plus,40,10,6,ParDec,0.16
+rodot_plus,40,10,6,ComDec,0.091
+rodot_plus,40,10,6,Total pipeline,70.594
+rodot_plus,50,10,6,Setup,70.759
+rodot_plus,50,10,6,KGen,0.002
+rodot_plus,50,10,6,DKShare,0.453
+rodot_plus,50,10,6,Enc,0.105
+rodot_plus,50,10,6,DKCom,0.003
+rodot_plus,50,10,6,ParDec,0.173
+rodot_plus,50,10,6,ComDec,0.101
+rodot_plus,50,10,6,Total pipeline,71.596
