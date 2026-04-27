@@ -638,6 +638,15 @@ def train_fedavg_ddfed(cfg):
     df["total_training_time"] = total_train_time
     df.to_csv(out_csv, index=False)
     print(f"{get_time()} Saved results to: {out_csv}")
+    if cfg.method != "fedavg":
+        if bool(getattr(cfg, "simulate_client_dropout", False)):
+            dropout_csv = results_dir / "fedavg_ddfed_dropout.csv"
+            df.to_csv(dropout_csv, index=False)
+            print(f"{get_time()} Saved results to: {dropout_csv}")
+        if bool(getattr(cfg, "simulate_replay_attack", False)):
+            replay_csv = results_dir / "fedavg_ddfed_replay.csv"
+            df.to_csv(replay_csv, index=False)
+            print(f"{get_time()} Saved results to: {replay_csv}")
     return df, out_csv
 
 
@@ -842,6 +851,18 @@ def parse_args():
     parser.add_argument("--skip_zero_blocks", type=str2bool, default=True, help="skip all-zero packed blocks to reduce crypto work")
     parser.add_argument("--packsize_sweep", type=str, default="", help="comma-separated pack sizes, e.g. 1,4,8,16,32")
     parser.add_argument("--results_dir", type=str, default="results")
+    parser.add_argument("--simulate_client_dropout", type=str2bool, default=False)
+    parser.add_argument("--client_dropout_rate", type=float, default=0.0)
+    parser.add_argument("--simulate_replay_attack", type=str2bool, default=False)
+    parser.add_argument(
+        "--replay_attack_type",
+        type=str,
+        default="client_ciphertext",
+        choices=["client_ciphertext", "partial_decryption", "cross_set"],
+    )
+    parser.add_argument("--replay_ratio", type=float, default=0.2)
+    parser.add_argument("--replay_source_round", type=int, default=0)
+    parser.add_argument("--replay_target_round", type=int, default=0)
     parser.add_argument("--run_sanity_check", action="store_true")
     return parser.parse_args()
 

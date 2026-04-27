@@ -1,10 +1,11 @@
-# FedAvg / DDFed / TMCFE 实验说明
+# FedAvg / DDFed / TMCFE / Lepcat 实验说明
 
 本目录提供了一个统一实验入口，用于运行：
 
 - `FedAvg` 基线（明文聚合）
 - `FedAvg + DDFed`（安全聚合，Rodot+）
 - `FedAvg + TMCFE`（安全聚合）
+- `FedAvg + Lepcat`（安全聚合，DMCFE-IP）
 
 ---
 
@@ -44,9 +45,10 @@ python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_
 
 ### 0.4 数据与联邦环境说明
 
-- 联邦划分环境（`--env_path ./env`）已在仓库中提供，可直接使用。
-- 对于 `MNIST/FashionMNIST/SVHN/CIFAR10/CIFAR100`：首次运行会自动下载数据集到 `--data_path`（默认 `./data`）。
-- 对于 `TinyImageNet`：首次运行会自动下载 `tiny-imagenet-200.zip` 并自动整理验证集目录（首次较慢，需联网和磁盘空间）。
+- 训练默认读取联邦环境：`--env_path ./env`（常用目录：`ddfed_fl/env/quickdrop-affine/`）。
+- 生成联邦环境时，数据集由参数控制：`--dataset_name`（如 `FashionMNIST`、`CIFAR10`、`MNIST`）。
+- 示例：`python env_generator/dilichlet_allocator/dilichlet_allocator.py --dataset_name FashionMNIST --num_clients 30 --alpha 0.1 --seed 42`
+- 对于 `MNIST/FashionMNIST/SVHN/CIFAR10/CIFAR100`，首次运行会自动下载到 `--data_path`（默认 `./data`）；`TinyImageNet` 首次运行会自动下载并整理验证集。
 
 准备完成后，直接从本 README 的“实验执行命令”开始运行即可。
 
@@ -56,8 +58,9 @@ python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_
 
 - 脚本（TMCFE）：`ddfed_fl/FedAvg/server/train_fedavg_tmcfe.py`
 - 脚本（DDFed/Rodot+）：`ddfed_fl/FedAvg/server/train_fedavg_ddfed.py`
+- 脚本（Lepcat/DMCFE-IP）：`ddfed_fl/FedAvg/server/train_fedavg_lepcat.py`
 
-两个脚本分别将 TMCFE / DDFed 安全聚合接入到 FedAvg 训练流程，并支持与 baseline 对照。
+三个脚本分别将 TMCFE / DDFed / Lepcat 安全聚合接入到 FedAvg 训练流程，并支持与 baseline 对照。
 
 ---
 
@@ -102,9 +105,12 @@ python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_
 
 核心参数：
 
-- `--method {fedavg,fedavg_ddfed,fedavg_tmcfe}`
+- `--method {fedavg,fedavg_ddfed,fedavg_tmcfe,fedavg_lepcat,sanity_lepcat}`
 - `--num_clients`
 - `--participation_rate`
+- `--active_client_count`（Lepcat 入口优先使用）
+- `--participant_counts`（例如 `5,10,20`）
+- `--experiment participant_scalability`
 - `--num_rounds`
 - `--local_epochs`
 - `--threshold`
@@ -120,6 +126,18 @@ python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_
 - `--packing_value_bits`（默认 32）
 - `--skip_zero_blocks`（默认 true）
 - `--ddfed_project_root`
+
+Lepcat 入口参数（`train_fedavg_lepcat.py`）：
+
+- `--lepcat_project_root`
+- `--secure_pack_size`
+- `--packing_value_bits`
+- `--max_plaintext_bits`
+- `--pack_sizes`（例如 `1,4,8,16`）
+- `--save_results`
+- `--save_figures`
+- `--results_dir`
+- `--figures_dir`
 
 TMCFE 额外参数：
 
@@ -149,7 +167,7 @@ DDFed 额外参数：
 
 ## 5）实验执行命令
 
-请在 `E:\code\my-test\DDFed-main` 目录下执行。
+建议在 `E:\code\my-test\DDFed-main\ddfed_fl` 目录下执行（使用 `-m FedAvg.server...` 时更稳妥）。
 
 统一对照参数（除方法与入口外保持一致）：
 
@@ -168,6 +186,12 @@ DDFed 额外参数：
 - `--packing_value_bits 32`
 - `--seed 0`
 
+Lepcat 入口补充说明：
+
+- `train_fedavg_lepcat.py` 中，若指定 `--active_client_count`，则优先使用；否则回退 `--participation_rate`。
+- `--participant_counts` 用于一次运行多个参与者数量（participant scalability）。
+- `--pack_sizes` 用于一次运行多个 `secure_pack_size`；若不设置则使用单个 `--secure_pack_size`。
+
 ### 5.1 运行 FedAvg baseline
 
 ```powershell
@@ -182,6 +206,24 @@ $env:KMP_DUPLICATE_LIB_OK='TRUE'
   --batch_size 64 `
   --participation_rate 0.2 `
   --seed 0
+```
+
+同样可使用 Lepcat 入口运行 baseline（便于和 `fedavg_lepcat` 保持同一入口）：
+
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_lepcat `
+  --method fedavg `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-mnist-seed42-u20-alpha0.1-scale0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --active_client_count 10 `
+  --seed 0 `
+  --save_results true `
+  --save_figures false
 ```
 
 ### 5.2 运行 FedAvg + TMCFE
@@ -229,6 +271,102 @@ $env:KMP_DUPLICATE_LIB_OK='TRUE'
   --packing_value_bits 32 `
   --skip_zero_blocks true `
   --seed 0
+```
+
+### 5.2c 运行 FedAvg + Lepcat（DMCFE-IP）
+
+单次运行（`active_client_count=10, secure_pack_size=1`）：
+
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_lepcat `
+  --method fedavg_lepcat `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-mnist-seed42-u20-alpha0.1-scale0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --active_client_count 10 `
+  --threshold 5 `
+  --seed 0 `
+  --lepcat_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 1 `
+  --packing_value_bits 32 `
+  --save_results true `
+  --save_figures true
+```
+
+单次运行（`active_client_count=10, secure_pack_size=8`）：
+
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_lepcat `
+  --method fedavg_lepcat `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-mnist-seed42-u20-alpha0.1-scale0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --active_client_count 10 `
+  --threshold 5 `
+  --seed 0 `
+  --lepcat_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
+  --save_results true `
+  --save_figures true
+```
+
+参与者数量扩展实验（单 pack size）：
+
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_lepcat `
+  --method fedavg_lepcat `
+  --experiment participant_scalability `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-mnist-seed42-u20-alpha0.1-scale0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --participant_counts 5,10,20 `
+  --threshold 5 `
+  --seed 0 `
+  --lepcat_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
+  --save_results true `
+  --save_figures true
+```
+
+参与者数量扩展实验（多 pack size）：
+
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_lepcat `
+  --method fedavg_lepcat `
+  --experiment participant_scalability `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-mnist-seed42-u20-alpha0.1-scale0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --participant_counts 5,10,20 `
+  --pack_sizes 1,4,8,16 `
+  --threshold 5 `
+  --seed 0 `
+  --lepcat_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --packing_value_bits 32 `
+  --save_results true `
+  --save_figures true
 ```
 
 ### 5.3 客户端掉线实验
@@ -441,44 +579,84 @@ $env:KMP_DUPLICATE_LIB_OK='TRUE'
 
 - `sanity_check max_abs_error=...`
 
+FedAvg + Lepcat（DMCFE-IP）：
+
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_lepcat `
+  --method sanity_lepcat `
+  --threshold 2 `
+  --seed 0 `
+  --lepcat_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
+  --active_client_count 5 `
+  --participant_counts 5,10,20 `
+  --pack_sizes 1,8 `
+  --save_results true
+```
+
+输出字段（Lepcat sanity）：
+
+- `active_client_count`
+- `secure_pack_size`
+- `slot_bits`
+- `max_abs_error`
+- `mean_abs_error`
+- `packing_overflow`
+- `passed`
+
 ---
 
 ## 7）结果文件与输出流程（横轴=客户端数量）
+
+说明：`fedavg_ddfed / fedavg_tmcfe / fedavg_lepcat` 的逐轮输出采用统一主字段格式，便于三者直接拼接对比分析。
 
 实验结果默认保存到：
 
 - `results/fedavg_baseline.csv`
 - `results/fedavg_ddfed.csv`
+- `results/fedavg_ddfed_dropout.csv`（当启用 dropout 参数）
+- `results/fedavg_ddfed_replay.csv`（当启用 replay 参数）
 - `results/fedavg_tmcfe.csv`
 - `results/fedavg_tmcfe_dropout.csv`（当启用 dropout 参数）
 - `results/fedavg_tmcfe_replay.csv`（当启用 replay 参数）
+- `results/fedavg_lepcat.csv`
+- `results/fedavg_lepcat_dropout.csv`（当启用 dropout 参数）
+- `results/fedavg_lepcat_replay.csv`（当启用 replay 参数）
 
-每轮记录字段（核心）包含：
+每轮记录字段（统一主字段）包含：
 
-- `train_loss`
-- `test_accuracy`
-- `test_loss`
-- `active_clients / dropped_clients`
-- `active_decryptors / dropped_decryptors`
-- `aggregation_success / failure_reason`
-- `enc_time / dk_generate_time / par_dec_time / com_dec_time / total_crypto_time`
+- `round / method / num_clients / participation_rate`
+- `train_loss / test_accuracy / test_loss`
+- `communication_time`
+- `encryption_time / enc_time`
+- `partial_decryption_time / par_dec_time`
+- `combine_decryption_time / com_dec_time`
+- `total_crypto_time`
+- `secure_pack_size / slot_bits / packing_value_bits / padding_bits / packing_overflow`
+- `num_model_params / num_ciphertexts / compression_ratio`
 - `max_abs_error`
-- `secure_pack_size / slot_bits / packing_value_bits / padding_bits`
-- `num_model_params / num_ciphertexts / compression_ratio / packing_overflow`
+- `pack_block_count / pack_avg_size / pack_max_base / pack_max_qmax / pack_skipped_zero_blocks`
+- `round_total_time`
+
 
 ### 7.1 客户端数量 sweep（横轴自变量）
 
 说明：默认输出流程采用**客户端数量**作为横轴（`number of clients`），通过切换不同联邦环境（例如 `u10`、`u20`）并记录每组结果实现对比。`secure_pack_size` 仅作为一个可调参数使用。
 
-示例（DDFed，pack=8）：
+示例（DDFed，pack=8，数据集可变）：
 
 ```powershell
 $env:KMP_DUPLICATE_LIB_OK='TRUE'
+$DATASET = "cifar10"  # 可改为: fashionmnist / cifar10
+$U = 10
 & "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_ddfed `
   --method fedavg_ddfed `
   --device cuda:0 `
   --env_path "./env" `
-  --env affine-cifar10-seed42-u10-alpha0.1-0.01 `
+  --env "affine-$DATASET-seed42-u$U-alpha0.1-0.01" `
   --num_rounds 1 `
   --local_epochs 1 `
   --batch_size 64 `
@@ -493,7 +671,7 @@ $env:KMP_DUPLICATE_LIB_OK='TRUE'
   --seed 0
 ```
 
-把 `--env` 改为 `u20`（或更多用户环境）重复运行，即可得到以客户端数量为横轴的对照数据。
+把 `$U` 改为 `20/30/40/50`（或更多用户环境）重复运行，即可得到以客户端数量为横轴的对照数据；把 `$DATASET` 改为其他数据集名称即可复用同一命令模板。
 
 ### 7.2 图像输出命名
 
@@ -501,9 +679,14 @@ $env:KMP_DUPLICATE_LIB_OK='TRUE'
 
 - `figures/crypto_time_vs_num_clients.png`
 - `figures/round_time_vs_num_clients.png`
-- `figures/accuracy_vs_round.png`
+- `figures/accuracy_vs_num_clients.png`
 - `figures/max_abs_error_vs_num_clients.png`
 - `figures/num_ciphertexts_vs_num_clients.png`
+
+说明：
+
+- 横轴始终为客户端数量（`num_clients` / `active_client_count`）。
+- 多条曲线可用于比较不同 `secure_pack_size`（例如 `1,4,8,16`）。
 
 ---
 
