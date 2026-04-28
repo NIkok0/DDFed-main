@@ -19,4 +19,4 @@ ENV/
 data/
 #results/
 **/data/
-**/results/
+#**/results/
