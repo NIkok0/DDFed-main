@@ -1,36 +1,36 @@
 clients,threshold,stage,time_ms
-10,5,Setup,0.001
-10,5,KeyGen,0.005
-10,5,Encrypt,0.006
-10,5,DKGenShare,0.035
-10,5,DKComb,0.069
-10,5,Decrypt,0.221
-10,5,Total pipeline,0.337
-20,10,Setup,0.001
-20,10,KeyGen,0.005
-20,10,Encrypt,0.006
-20,10,DKGenShare,0.044
-20,10,DKComb,0.119
-20,10,Decrypt,0.24
-20,10,Total pipeline,0.415
-30,15,Setup,0.001
-30,15,KeyGen,0.005
-30,15,Encrypt,0.006
-30,15,DKGenShare,0.05
-30,15,DKComb,0.17
-30,15,Decrypt,0.254
-30,15,Total pipeline,0.486
-40,20,Setup,0.001
-40,20,KeyGen,0.005
-40,20,Encrypt,0.006
-40,20,DKGenShare,0.058
-40,20,DKComb,0.215
-40,20,Decrypt,0.292
-40,20,Total pipeline,0.577
-50,25,Setup,0.001
-50,25,KeyGen,0.005
-50,25,Encrypt,0.006
-50,25,DKGenShare,0.071
-50,25,DKComb,0.281
-50,25,Decrypt,0.316
-50,25,Total pipeline,0.6799999999999999
+10,5,Setup,0.002
+10,5,KeyGen,2.961
+10,5,Encrypt,5.824
+10,5,DKGenShare,16.93
+10,5,DKComb,14.346
+10,5,Decrypt,13.197
+10,5,Total pipeline,53.260000000000005
+20,10,Setup,0.002
+20,10,KeyGen,2.934
+20,10,Encrypt,5.771
+20,10,DKGenShare,16.808
+20,10,DKComb,20.574
+20,10,Decrypt,19.46
+20,10,Total pipeline,65.549
+30,15,Setup,0.002
+30,15,KeyGen,2.894
+30,15,Encrypt,5.701
+30,15,DKGenShare,16.607
+30,15,DKComb,26.912
+30,15,Decrypt,25.547
+30,15,Total pipeline,77.663
+40,20,Setup,0.002
+40,20,KeyGen,2.9
+40,20,Encrypt,5.719
+40,20,DKGenShare,16.668
+40,20,DKComb,33.328
+40,20,Decrypt,32.016
+40,20,Total pipeline,90.63300000000001
+50,25,Setup,0.002
+50,25,KeyGen,2.893
+50,25,Encrypt,5.705
+50,25,DKGenShare,16.678
+50,25,DKComb,39.59
+50,25,Decrypt,38.265
+50,25,Total pipeline,103.133

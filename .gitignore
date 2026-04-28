@@ -17,6 +17,6 @@ ENV/
 
 # 实验/产出数据（避免仓库过大）
 data/
-results/
+#results/
 **/data/
 **/results/

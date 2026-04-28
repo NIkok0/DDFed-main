@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parent
 PROJECT_ROOT = ROOT.parent
 CONFIG_PATH = PROJECT_ROOT / "ddfed_crypto" / "config.py"
 CLIENT_COUNTS = [10, 20, 30, 40, 50]
-ITERATIONS = 200
+ITERATIONS = 500
 
 DMCFE_STAGE_ORDER = [
     "Global Setup",

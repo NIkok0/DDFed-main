@@ -1,9 +1,0 @@
-scheme,n,t,stage,time_ms
-rodot_plus,10,6,Setup,67.041
-rodot_plus,10,6,KGen,0.003
-rodot_plus,10,6,DKShare,0.441
-rodot_plus,10,6,Enc,0.106
-rodot_plus,10,6,DKCom,0.001
-rodot_plus,10,6,ParDec,0.138
-rodot_plus,10,6,ComDec,0.085
-rodot_plus,10,6,Total pipeline,67.815

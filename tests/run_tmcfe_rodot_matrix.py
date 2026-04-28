@@ -14,7 +14,7 @@ PROJECT_ROOT = ROOT.parent
 CONFIG_PATH = PROJECT_ROOT / "ddfed_crypto" / "config.py"
 OUT_DIR = ROOT / "benchmark_outputs"
 CLIENT_COUNTS = [10, 20, 30, 40, 50]
-ITERATIONS = 200
+ITERATIONS = 500
 
 TMCFE_STAGE_ORDER = [
     "Setup",
@@ -201,8 +201,8 @@ def run_scheme_matrix(scheme: str, script_name: str, original_config: str):
 
         env = {"NUM_ITERATIONS_OVERRIDE": str(ITERATIONS)}
         stdout_text = run_script(script_name, env_override=env)
-        log_path = OUT_DIR / f"{scheme}_n{n}_t{t}.log.txt"
-        log_path.write_text(stdout_text, encoding="utf-8")
+        # log_path = OUT_DIR / f"{scheme}_n{n}_t{t}.log.txt"
+        # log_path.write_text(stdout_text, encoding="utf-8")
 
         labels, values = parse_tmcfe(stdout_text) if scheme == "tmcfe" else parse_rodot(stdout_text)
         for stage, time_ms in zip(labels, values):
@@ -230,8 +230,8 @@ def run_fixed_decryptor_matrix(
         CONFIG_PATH.write_text(config_text, encoding="utf-8")
         env = {"NUM_ITERATIONS_OVERRIDE": str(ITERATIONS)}
         stdout_text = run_script(script_name, env_override=env)
-        log_path = OUT_DIR / f"{scheme}_enc{n_encryptors}_n{n_decryptors}_t{t_threshold}.log.txt"
-        log_path.write_text(stdout_text, encoding="utf-8")
+        # log_path = OUT_DIR / f"{scheme}_enc{n_encryptors}_n{n_decryptors}_t{t_threshold}.log.txt"
+        # log_path.write_text(stdout_text, encoding="utf-8")
         labels, values = parse_tmcfe(stdout_text) if scheme == "tmcfe" else parse_rodot(stdout_text)
         for stage, time_ms in zip(labels, values):
             rows.append(
@@ -248,75 +248,40 @@ def run_fixed_decryptor_matrix(
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--fixed-four",
-        action="store_true",
-        help="Run four cases with fixed decryptor settings and varying clients (10..50).",
-    )
-    args = parser.parse_args()
-
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     original_config = CONFIG_PATH.read_text(encoding="utf-8")
 
-    if args.fixed_four:
-        cases = [
-            ("tmcfe", "ex_tmcfe_time.py", 5, 3, TMCFE_STAGE_ORDER),
-            ("tmcfe", "ex_tmcfe_time.py", 10, 6, TMCFE_STAGE_ORDER),
-            ("rodot_plus", "ex_rodot_plus_time.py", 5, 3, RODOT_STAGE_ORDER),
-            ("rodot_plus", "ex_rodot_plus_time.py", 10, 6, RODOT_STAGE_ORDER),
-        ]
-        outputs = []
-        try:
-            for scheme, script, n, t, order in cases:
-                print(f"[RUN] {scheme} (n={n}, t={t}), clients={CLIENT_COUNTS}")
-                df = run_fixed_decryptor_matrix(scheme, script, n, t, original_config)
-                csv_path = OUT_DIR / f"{scheme}_n{n}_t{t}_clients_10_50.csv"
-                png_path = OUT_DIR / f"{scheme}_n{n}_t{t}_clients_10_50.png"
-                df.to_csv(csv_path, index=False)
-                save_plot(
-                    df,
-                    f"{scheme.upper()} times vs clients (n={n}, t={t})",
-                    png_path,
-                    order,
-                )
-                outputs.append((csv_path, png_path))
-        finally:
-            CONFIG_PATH.write_text(original_config, encoding="utf-8")
-            print("[DONE] config.py restored to original values.")
+    cases = [
+        ("tmcfe", "ex_tmcfe_time.py", 5, 3, TMCFE_STAGE_ORDER),
+        ("tmcfe", "ex_tmcfe_time.py", 10, 6, TMCFE_STAGE_ORDER),
+        ("rodot_plus", "ex_rodot_plus_time.py", 5, 3, RODOT_STAGE_ORDER),
+        ("rodot_plus", "ex_rodot_plus_time.py", 10, 6, RODOT_STAGE_ORDER),
+    ]
 
-        print("\n=== Generated files (4 figures) ===")
-        for csv_path, png_path in outputs:
-            print(f"CSV: {csv_path}")
-            print(f"PNG: {png_path}")
-        return
+    outputs = []
 
     try:
-        tmcfe_df = run_scheme_matrix("tmcfe", "ex_tmcfe_time.py", original_config)
-        rodot_df = run_scheme_matrix("rodot_plus", "ex_rodot_plus_time.py", original_config)
+        for scheme, script, n, t, order in cases:
+            print(f"[RUN] {scheme} (n={n}, t={t}), clients={CLIENT_COUNTS}")
+            df = run_fixed_decryptor_matrix(scheme, script, n, t, original_config)
+            csv_path = OUT_DIR / f"{scheme}_n{n}_t{t}_clients_10_50.csv"
+            png_path = OUT_DIR / f"{scheme}_n{n}_t{t}_clients_10_50.png"
+            df.to_csv(csv_path, index=False)
+            save_plot(
+                df,
+                f"{scheme.upper()} times vs clients (n={n}, t={t})",
+                png_path,
+                order,
+            )
+            outputs.append((csv_path, png_path))
     finally:
         CONFIG_PATH.write_text(original_config, encoding="utf-8")
         print("[DONE] config.py restored to original values.")
 
-    tmcfe_csv = OUT_DIR / "tmcfe_clients_10_50.csv"
-    rodot_csv = OUT_DIR / "rodot_plus_clients_10_50.csv"
-    tmcfe_png = OUT_DIR / "tmcfe_clients_10_50.png"
-    rodot_png = OUT_DIR / "rodot_plus_clients_10_50.png"
-
-    tmcfe_df.to_csv(tmcfe_csv, index=False)
-    rodot_df.to_csv(rodot_csv, index=False)
-    save_plot(tmcfe_df, "TMCFE times vs number of clients", tmcfe_png, TMCFE_STAGE_ORDER)
-    save_plot(rodot_df, "Rodot+ times vs number of clients", rodot_png, RODOT_STAGE_ORDER)
-
-    print("\n=== Generated files ===")
-    print(f"CSV: {tmcfe_csv}")
-    print(f"PNG: {tmcfe_png}")
-    print(f"CSV: {rodot_csv}")
-    print(f"PNG: {rodot_png}")
-    merged = pd.concat([tmcfe_df, rodot_df], ignore_index=True)
-    merged_csv = OUT_DIR / "tmcfe_rodot_clients_10_50_all.csv"
-    merged.to_csv(merged_csv, index=False)
-    print(f"CSV: {merged_csv}")
+    print("\n=== Generated files (4 figures) ===")
+    for csv_path, png_path in outputs:
+        print(f"CSV: {csv_path}")
+        print(f"PNG: {png_path}")
 
 
 if __name__ == "__main__":

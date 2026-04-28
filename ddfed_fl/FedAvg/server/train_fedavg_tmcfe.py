@@ -687,25 +687,25 @@ def _save_results(df: pd.DataFrame, cfg):
 
     outputs = []
     if cfg.method == "fedavg":
-        base_path = results_dir / "fedavg_baseline.csv"
+        base_path = results_dir / f"fedavg_baseline_{cfg.env}.csv"
         df.to_csv(base_path, index=False)
         outputs.append(base_path)
     else:
-        main_path = results_dir / "fedavg_tmcfe.csv"
+        main_path = results_dir / f"fedavg_tmcfe_{cfg.env}.csv"
         df.to_csv(main_path, index=False)
         outputs.append(main_path)
         if bool(cfg.simulate_client_dropout) or bool(cfg.simulate_decryptor_dropout):
-            dropout_path = results_dir / "fedavg_tmcfe_dropout.csv"
+            dropout_path = results_dir / f"fedavg_tmcfe_dropout_{cfg.env}.csv"
             df.to_csv(dropout_path, index=False)
             outputs.append(dropout_path)
             # Compatibility output names.
-            df.to_csv(results_dir / "dropout_client.csv", index=False)
-            df.to_csv(results_dir / "dropout_decryptor.csv", index=False)
+            df.to_csv(results_dir / f"dropout_client_{cfg.env}.csv", index=False)
+            df.to_csv(results_dir / f"dropout_decryptor_{cfg.env}.csv", index=False)
         if bool(cfg.simulate_replay_attack):
-            replay_path = results_dir / "fedavg_tmcfe_replay.csv"
+            replay_path = results_dir / f"fedavg_tmcfe_replay_{cfg.env}.csv"
             df.to_csv(replay_path, index=False)
             outputs.append(replay_path)
-            df.to_csv(results_dir / "replay_attack.csv", index=False)
+            df.to_csv(results_dir / f"replay_attack_{cfg.env}.csv", index=False)
     return outputs
 
 

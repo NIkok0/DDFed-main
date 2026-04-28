@@ -1,36 +1,36 @@
 scheme,n,n_decryptors,t,stage,time_ms
-tmcfe,10,5,3,Setup,33.174
-tmcfe,10,5,3,SKDistribute,0.06
-tmcfe,10,5,3,DKGenerate,4.679
-tmcfe,10,5,3,Encrypt,0.021
-tmcfe,10,5,3,ShareDecrypt,0.075
-tmcfe,10,5,3,CombineDecrypt,0.744
-tmcfe,10,5,3,Total pipeline,38.752
-tmcfe,20,5,3,Setup,33.289
-tmcfe,20,5,3,SKDistribute,0.12
-tmcfe,20,5,3,DKGenerate,8.88
-tmcfe,20,5,3,Encrypt,0.02
-tmcfe,20,5,3,ShareDecrypt,0.139
-tmcfe,20,5,3,CombineDecrypt,0.731
-tmcfe,20,5,3,Total pipeline,43.178
-tmcfe,30,5,3,Setup,35.496
-tmcfe,30,5,3,SKDistribute,0.177
-tmcfe,30,5,3,DKGenerate,13.094
-tmcfe,30,5,3,Encrypt,0.019
-tmcfe,30,5,3,ShareDecrypt,0.201
-tmcfe,30,5,3,CombineDecrypt,0.744
-tmcfe,30,5,3,Total pipeline,49.731
-tmcfe,40,5,3,Setup,34.49
-tmcfe,40,5,3,SKDistribute,0.227
-tmcfe,40,5,3,DKGenerate,17.322
-tmcfe,40,5,3,Encrypt,0.019
-tmcfe,40,5,3,ShareDecrypt,0.258
-tmcfe,40,5,3,CombineDecrypt,0.748
-tmcfe,40,5,3,Total pipeline,53.065
-tmcfe,50,5,3,Setup,35.263
-tmcfe,50,5,3,SKDistribute,0.287
-tmcfe,50,5,3,DKGenerate,21.616
-tmcfe,50,5,3,Encrypt,0.02
-tmcfe,50,5,3,ShareDecrypt,0.324
-tmcfe,50,5,3,CombineDecrypt,0.747
-tmcfe,50,5,3,Total pipeline,58.256
+tmcfe,10,5,3,Setup,22.731
+tmcfe,10,5,3,SKDistribute,0.037
+tmcfe,10,5,3,DKGenerate,2.893
+tmcfe,10,5,3,Encrypt,0.013
+tmcfe,10,5,3,ShareDecrypt,0.05
+tmcfe,10,5,3,CombineDecrypt,0.84
+tmcfe,10,5,3,Total pipeline,26.565
+tmcfe,20,5,3,Setup,21.035
+tmcfe,20,5,3,SKDistribute,0.073
+tmcfe,20,5,3,DKGenerate,5.524
+tmcfe,20,5,3,Encrypt,0.013
+tmcfe,20,5,3,ShareDecrypt,0.091
+tmcfe,20,5,3,CombineDecrypt,0.835
+tmcfe,20,5,3,Total pipeline,27.57
+tmcfe,30,5,3,Setup,21.284
+tmcfe,30,5,3,SKDistribute,0.106
+tmcfe,30,5,3,DKGenerate,7.982
+tmcfe,30,5,3,Encrypt,0.012
+tmcfe,30,5,3,ShareDecrypt,0.129
+tmcfe,30,5,3,CombineDecrypt,0.818
+tmcfe,30,5,3,Total pipeline,30.331
+tmcfe,40,5,3,Setup,18.857
+tmcfe,40,5,3,SKDistribute,0.14
+tmcfe,40,5,3,DKGenerate,10.568
+tmcfe,40,5,3,Encrypt,0.012
+tmcfe,40,5,3,ShareDecrypt,0.169
+tmcfe,40,5,3,CombineDecrypt,0.855
+tmcfe,40,5,3,Total pipeline,30.602
+tmcfe,50,5,3,Setup,20.359
+tmcfe,50,5,3,SKDistribute,0.178
+tmcfe,50,5,3,DKGenerate,13.197
+tmcfe,50,5,3,Encrypt,0.012
+tmcfe,50,5,3,ShareDecrypt,0.21
+tmcfe,50,5,3,CombineDecrypt,0.827
+tmcfe,50,5,3,Total pipeline,34.784

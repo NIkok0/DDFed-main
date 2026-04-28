@@ -55,7 +55,7 @@ if __name__ == '__main__':
     # print(input_sz, num_cls)
     N_CLIENTS = args.num_clients
     DIRICHLET_ALPHA = args.alpha
-    root = '../../env/{}/{}/{}'.format(FIXED_PREFIX, data_type, FIXED_SAVING_FORMAT.format(data_type.lower(), args.seed, N_CLIENTS, args.alpha))
+    root = '../env/{}/{}/{}'.format(FIXED_PREFIX, data_type, FIXED_SAVING_FORMAT.format(data_type.lower(), args.seed, N_CLIENTS, args.alpha))
     if not os.path.exists(root):
         os.makedirs(root)
     train_root = '{}/{}'.format(root, 'train')

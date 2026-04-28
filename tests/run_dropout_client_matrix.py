@@ -15,8 +15,8 @@ OUT_DIR = ROOT / "benchmark_outputs" / "dropout_client_matrix"
 
 CLIENT_COUNTS = [10, 20, 30, 40, 50]
 DROPOUT_RATES = [0.10, 0.20, 0.30]
-DMCFE_ITER = 200
-RODOT_ITER = 200
+DMCFE_ITER = 1
+RODOT_ITER = 500
 
 DMCFE_STAGE_ORDER = [
     "Global Setup",
@@ -189,8 +189,8 @@ def run_scheme_matrix(scheme: str, drop_rate: float, original_config: str):
             drop_m = drop_total - drop_k
             kv = {
                 "N_ENCRYPTORS": n,
-                "N_DECRYPTORS": n,
-                "T_THRESHOLD": t,
+                "N_DECRYPTORS": 5,
+                "T_THRESHOLD": 3,
                 "N_DROPPED_K": drop_k,
                 "N_DROPPED_M": drop_m,
                 "N_DROPPED_D": 0,
@@ -211,7 +211,7 @@ def run_scheme_matrix(scheme: str, drop_rate: float, original_config: str):
 
         new_config = set_config_values(original_config, kv)
         CONFIG_PATH.write_text(new_config, encoding="utf-8")
-        print(f"[RUN] {scheme} drop={int(drop_rate*100)}% n={n} t={t} drop={drop_total}")
+        print(f"[RUN] {scheme} drop={int(drop_rate*100)}% clients number={n} threshold={kv['T_THRESHOLD']} drop={drop_total}")
         out = run_python(script, env)
 
         metrics = parse_rodot(out) if scheme == "rodot_plus" else parse_dmcfe(out)
