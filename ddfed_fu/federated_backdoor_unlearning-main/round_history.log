@@ -1,0 +1,176 @@
+----------------------
+Round: 1
+----------------------
+Selected Clients for Update: [85, 68, 38, 78, 55, 5, 94, 44, 87, 96]
+Client 85: train acc -> 10.333, test acc -> 10.000
+Client 68: train acc -> 10.833, test acc -> 10.000
+Client 38: train acc -> 11.333, test acc -> 10.000
+Client 78: train acc -> 10.000, test acc -> 10.000
+Client 55: train acc -> 10.667, test acc -> 10.000
+Client 5: train acc -> 10.333, test acc -> 10.000
+Client 94: train acc -> 10.833, test acc -> 10.000
+Client 44: train acc -> 10.667, test acc -> 10.000
+Client 87: train acc -> 10.167, test acc -> 10.000
+Client 96: train acc -> 10.000, test acc -> 10.000
+Test Accuracy: 10.000, Backdoor Accuracy -> 0.000
+----------------------
+Round: 2
+----------------------
+Selected Clients for Update: [41, 22, 58, 10, 81, 35, 52, 87, 89, 36]
+Client 41: train acc -> 10.333, test acc -> 10.000
+Client 22: train acc -> 13.500, test acc -> 10.000
+Client 58: train acc -> 10.667, test acc -> 10.000
+Client 10: train acc -> 12.500, test acc -> 10.000
+Client 81: train acc -> 11.333, test acc -> 10.000
+Client 35: train acc -> 11.833, test acc -> 10.000
+Client 52: train acc -> 12.333, test acc -> 10.000
+Client 87: train acc -> 12.000, test acc -> 10.000
+Client 89: train acc -> 10.000, test acc -> 10.000
+Client 36: train acc -> 12.167, test acc -> 10.000
+Test Accuracy: 10.000, Backdoor Accuracy -> 0.000
+----------------------
+Round: 3
+----------------------
+Selected Clients for Update: [96, 73, 57, 71, 6, 1, 67, 28, 33, 35]
+Client 96: train acc -> 19.167, test acc -> 16.940
+Client 73: train acc -> 10.167, test acc -> 10.000
+Client 57: train acc -> 12.667, test acc -> 11.160
+Client 71: train acc -> 11.833, test acc -> 10.000
+Client 6: train acc -> 13.000, test acc -> 10.000
+Client 1: train acc -> 11.833, test acc -> 10.000
+Client 67: train acc -> 12.000, test acc -> 10.030
+Client 28: train acc -> 13.000, test acc -> 10.000
+Client 33: train acc -> 12.333, test acc -> 10.000
+Client 35: train acc -> 11.833, test acc -> 10.000
+Test Accuracy: 10.000, Backdoor Accuracy -> 0.000
+----------------------
+Round: 4
+----------------------
+Selected Clients for Update: [34, 49, 59, 57, 6, 80, 85, 27, 40, 1]
+Client 34: train acc -> 12.500, test acc -> 10.000
+Client 49: train acc -> 9.500, test acc -> 10.770
+Client 59: train acc -> 10.333, test acc -> 10.000
+Client 57: train acc -> 11.333, test acc -> 10.000
+Client 6: train acc -> 11.500, test acc -> 10.000
+Client 80: train acc -> 11.833, test acc -> 10.000
+Client 85: train acc -> 10.167, test acc -> 10.000
+Client 27: train acc -> 12.000, test acc -> 10.000
+Client 40: train acc -> 12.833, test acc -> 10.000
+Client 1: train acc -> 10.667, test acc -> 11.120
+Test Accuracy: 14.600, Backdoor Accuracy -> 0.000
+----------------------
+Round: 5
+----------------------
+Selected Clients for Update: [77, 36, 97, 37, 95, 98, 12, 61, 79, 18]
+Client 77: train acc -> 13.833, test acc -> 14.910
+Client 36: train acc -> 23.500, test acc -> 20.300
+Client 97: train acc -> 20.500, test acc -> 19.970
+Client 37: train acc -> 19.500, test acc -> 20.090
+Client 95: train acc -> 24.000, test acc -> 22.630
+Client 98: train acc -> 24.333, test acc -> 22.100
+Client 12: train acc -> 25.333, test acc -> 24.930
+Client 61: train acc -> 32.667, test acc -> 27.410
+Client 79: train acc -> 29.167, test acc -> 25.040
+Client 18: train acc -> 26.833, test acc -> 27.290
+Test Accuracy: 25.970, Backdoor Accuracy -> 0.000
+----------------------
+Round: 6
+----------------------
+Selected Clients for Update: [37, 22, 50, 57, 60, 93, 6, 39, 9, 0]
+Client 37: train acc -> 33.167, test acc -> 32.490
+Client 22: train acc -> 33.000, test acc -> 31.320
+Client 50: train acc -> 31.500, test acc -> 31.900
+Client 57: train acc -> 35.167, test acc -> 33.120
+Client 60: train acc -> 31.333, test acc -> 30.980
+Client 93: train acc -> 9.667, test acc -> 10.000
+Client 6: train acc -> 35.500, test acc -> 34.670
+Client 39: train acc -> 35.833, test acc -> 34.660
+Client 9: train acc -> 31.333, test acc -> 30.370
+Client 0: train acc -> 43.833, test acc -> 38.590
+Test Accuracy: 34.500, Backdoor Accuracy -> 0.000
+----------------------
+Round: 7
+----------------------
+Selected Clients for Update: [99, 44, 40, 8, 52, 90, 80, 49, 27, 41]
+Client 99: train acc -> 41.500, test acc -> 37.550
+Client 44: train acc -> 31.500, test acc -> 29.630
+Client 40: train acc -> 43.333, test acc -> 40.190
+Client 8: train acc -> 37.333, test acc -> 36.010
+Client 52: train acc -> 39.167, test acc -> 36.360
+Client 90: train acc -> 41.167, test acc -> 37.260
+Client 80: train acc -> 44.167, test acc -> 42.680
+Client 49: train acc -> 38.500, test acc -> 36.210
+Client 27: train acc -> 46.333, test acc -> 39.530
+Client 41: train acc -> 38.167, test acc -> 37.230
+Test Accuracy: 37.750, Backdoor Accuracy -> 0.000
+----------------------
+Round: 8
+----------------------
+Selected Clients for Update: [47, 15, 2, 98, 63, 9, 91, 33, 86, 56]
+Client 47: train acc -> 31.667, test acc -> 31.040
+Client 15: train acc -> 48.167, test acc -> 45.740
+Client 2: train acc -> 20.833, test acc -> 19.590
+Client 98: train acc -> 44.000, test acc -> 41.830
+Client 63: train acc -> 38.667, test acc -> 35.310
+Client 9: train acc -> 48.667, test acc -> 45.380
+Client 91: train acc -> 38.833, test acc -> 36.320
+Client 33: train acc -> 30.833, test acc -> 31.910
+Client 86: train acc -> 19.500, test acc -> 20.970
+Client 56: train acc -> 29.167, test acc -> 28.690
+Test Accuracy: 37.450, Backdoor Accuracy -> 0.000
+----------------------
+Round: 9
+----------------------
+Selected Clients for Update: [43, 17, 7, 21, 62, 66, 0, 76, 15, 16]
+Client 43: train acc -> 44.333, test acc -> 40.910
+Client 17: train acc -> 46.000, test acc -> 46.470
+Client 7: train acc -> 42.833, test acc -> 40.100
+Client 21: train acc -> 11.333, test acc -> 10.000
+Client 62: train acc -> 13.667, test acc -> 11.360
+Client 66: train acc -> 42.833, test acc -> 42.470
+Client 0: train acc -> 33.000, test acc -> 30.060
+Client 76: train acc -> 21.833, test acc -> 19.650
+Client 15: train acc -> 41.333, test acc -> 41.130
+Client 16: train acc -> 45.000, test acc -> 44.180
+Test Accuracy: 43.070, Backdoor Accuracy -> 0.000
+----------------------
+Round: 10
+----------------------
+Selected Clients for Update: [79, 32, 52, 36, 97, 27, 33, 39, 9, 3]
+Client 79: train acc -> 42.167, test acc -> 37.260
+Client 32: train acc -> 38.500, test acc -> 36.060
+Client 52: train acc -> 50.500, test acc -> 48.840
+Client 36: train acc -> 56.833, test acc -> 53.990
+Client 97: train acc -> 45.333, test acc -> 44.520
+Client 27: train acc -> 43.333, test acc -> 42.550
+Client 33: train acc -> 43.333, test acc -> 42.550
+Client 39: train acc -> 46.333, test acc -> 44.040
+Client 9: train acc -> 47.167, test acc -> 42.800
+Client 3: train acc -> 51.167, test acc -> 45.650
+Test Accuracy: 49.990, Backdoor Accuracy -> 0.000
+----------------------
+Round: 11
+----------------------
+Selected Clients for Update: [5, 72, 82, 56, 98, 18, 66, 64, 14, 87]
+Client 5: train acc -> 43.833, test acc -> 42.840
+Client 72: train acc -> 36.833, test acc -> 34.280
+Client 82: train acc -> 50.667, test acc -> 48.380
+Client 56: train acc -> 59.000, test acc -> 56.940
+Client 98: train acc -> 50.500, test acc -> 48.730
+Client 18: train acc -> 26.667, test acc -> 27.090
+Client 66: train acc -> 50.833, test acc -> 49.170
+Client 64: train acc -> 19.333, test acc -> 18.830
+Client 14: train acc -> 49.833, test acc -> 47.480
+Client 87: train acc -> 42.667, test acc -> 36.760
+Test Accuracy: 53.400, Backdoor Accuracy -> 0.000
+----------------------
+Round: 12
+----------------------
+Selected Clients for Update: [79, 59, 36, 84, 70, 11, 91, 57, 83, 53]
+Client 79: train acc -> 37.167, test acc -> 39.230
+Client 59: train acc -> 52.333, test acc -> 48.080
+Client 36: train acc -> 49.667, test acc -> 47.900
+Client 84: train acc -> 30.667, test acc -> 30.020
+Client 70: train acc -> 40.833, test acc -> 37.540
+Client 11: train acc -> 47.667, test acc -> 46.200
+Client 91: train acc -> 48.833, test acc -> 45.850

@@ -188,25 +188,35 @@ class LepcatContext:
         self.client_sks = {}
         self.client_pks = {}
         self.client_shares = {}
+        self.setup_done = False
 
     def setup(self):
+        if self.setup_done:
+            return
         root = Path(self.cfg.lepcat_project_root).resolve()
         if str(root) not in sys.path:
             sys.path.append(str(root))
         from ddfed_crypto.baselines.dmcfe_ip import DMCFE_IP  # noqa: WPS433
 
+        # Server(??) ->> Client(??): one-time global setup before FL round 1.
         self.lepcat = DMCFE_IP()
         self.pp = self.lepcat.GlobalSetup(
             lam=int(self.cfg.lambda_sec),
             n_encryptors=len(self.all_users),
             t=int(self.cfg.threshold),
         )
+        # Client(??) ->> Client/Server: all potential clients generate persistent keys/shares once.
         for enc_id in range(1, len(self.all_users) + 1):
             sk_i, pk_i = self.lepcat.ClientSetup()
             shares_i = self.lepcat.KeySharing(sk_i)
             self.client_sks[enc_id] = sk_i
             self.client_pks[enc_id] = pk_i
             self.client_shares[enc_id] = shares_i
+        self.setup_done = True
+
+    def require_ready(self):
+        if not self.setup_done or self.lepcat is None:
+            raise RuntimeError("LepcatContext.setup() must be called once before FL rounds")
 
 
 def secure_aggregate_lepcat(
@@ -219,6 +229,8 @@ def secure_aggregate_lepcat(
     experiment_id: str,
     model_version: str,
 ):
+    # Phase 2 only: local training has completed; no setup/sk generation is performed here.
+    lepcat_ctx.require_ready()
     selected_users = sorted(list(selected_users))
     selected_enc_ids = [lepcat_ctx.uid_to_enc_id[uid] for uid in selected_users]
     selected_pk_dict = {enc_id: lepcat_ctx.client_pks[enc_id] for enc_id in selected_enc_ids}
@@ -228,6 +240,7 @@ def secure_aggregate_lepcat(
     if sum_weights <= 0:
         raise ValueError("sum_weights must be positive")
 
+    # Client(??) ->> Server(??): active clients sign/agree on current aggregation weights.
     t0 = time.time()
     for enc_id in selected_enc_ids:
         payload = lepcat_ctx.lepcat.AgreeOnWeightY_Sign(y_dict[enc_id], lepcat_ctx.client_sks[enc_id])
@@ -257,6 +270,7 @@ def secure_aggregate_lepcat(
     max_slots_by_bits = max(1, int(cfg.max_plaintext_bits) // max(1, int(slot_bits)))
     effective_pack_size = max(1, min(int(cfg.secure_pack_size), int(max_slots_by_bits)))
 
+    # Client(??): quantize and pack local model updates into plaintext blocks.
     t0 = time.time()
     packed_blocks = {}
     packing_overflow = False
@@ -306,6 +320,7 @@ def secure_aggregate_lepcat(
             block_id=block_id,
         )
         enc_payloads = {}
+        # Client(??) ->> Server(??): encrypt this block for the active set.
         t1 = time.time()
         for uid in selected_users:
             enc_id = lepcat_ctx.uid_to_enc_id[uid]
@@ -319,6 +334,7 @@ def secure_aggregate_lepcat(
             )
         enc_time += time.time() - t1
 
+        # Server(??): aggregate ciphertexts/shares for this block.
         t1 = time.time()
         agg_packed = lepcat_ctx.lepcat.Aggregation(
             U=selected_enc_ids,

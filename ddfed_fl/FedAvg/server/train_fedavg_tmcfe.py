@@ -195,6 +195,9 @@ class TMCFEContext:
         self._tmcfe_cls = TMCFE
 
     def setup_system(self):
+        if self.tmcfe is not None:
+            return
+        # Server(??) ->> Client, Decryptor(??): one-time TMCFE setup before FL round 1.
         self.tmcfe = self._tmcfe_cls()
         self.public_params = self.tmcfe.setup(
             lam=int(self.cfg.lambda_sec),
@@ -203,15 +206,18 @@ class TMCFEContext:
             t=self.threshold,
         )
         self.client_sk_by_enc_id = {}
+        # Server(??) ->> Client(??): distribute persistent sk_i to every potential client once.
         for enc_id in range(1, self.num_encryptors + 1):
             self.client_sk_by_enc_id[enc_id] = self.tmcfe.sk_distribute(enc_id)
 
     def ensure_setup(self):
+        # Phase 1 must be one-time. Do not re-run setup/sk_distribute inside FL rounds.
         if self.tmcfe is None:
             self.setup_system()
-        elif not self.setup_once:
-            # setup_once=False mode: explicitly re-run setup every round.
-            self.setup_system()
+
+    def require_ready(self):
+        if self.tmcfe is None or not self.client_sk_by_enc_id:
+            raise RuntimeError("TMCFEContext.setup_system() must be called once before FL rounds")
 
 
 def _choose_replay_source_round(cfg, ctx: TMCFEContext) -> int:
@@ -285,7 +291,7 @@ def _aggregate_single_scalar_tmcfe(
     client_set_fp = _set_fingerprint(active_enc_ids)
     decryptor_set_fp = _set_fingerprint(active_decryptors)
 
-    # Encrypt stage.
+    # Client(??) ->> Server(??) ->> Decryptor(??): active clients encrypt uploads.
     t0 = time.time()
     ct_payloads = {}
     for uid in active_clients:
@@ -348,7 +354,7 @@ def _aggregate_single_scalar_tmcfe(
     _validate_ciphertexts(ct_payloads, label, active_enc_ids, active_decryptors)
     ct_dict = {enc_id: payload["ct"] for enc_id, payload in ct_payloads.items()}
 
-    # Partial decrypt stage.
+    # Decryptor(??) ->> Server(??): independent share_decrypt from each decryptor.
     t0 = time.time()
     partial_payloads = {}
     for dec_id in active_decryptors:
@@ -386,7 +392,7 @@ def _aggregate_single_scalar_tmcfe(
     _validate_partials(partial_payloads, label, active_enc_ids, active_decryptors)
     pardec_dict = {dec_id: payload["partial"] for dec_id, payload in partial_payloads.items()}
 
-    # Combine stage.
+    # Server(??): combine threshold shares to recover the weighted plaintext sum.
     t0 = time.time()
     scalar_sum = int(ctx.tmcfe.combine_decrypt(pardec_dict))
     t_comdec = time.time() - t0
@@ -421,7 +427,8 @@ def secure_aggregate_tmcfe(
     if len(active_decryptors) < int(cfg.threshold):
         raise AggregationFailure("Not enough active decryptors to satisfy threshold")
 
-    tmcfe_ctx.ensure_setup()
+    # Phase 2 only: setup/sk_distribute are owned by TMCFEContext before the FL loop.
+    tmcfe_ctx.require_ready()
     active_clients = sorted(active_clients)
     active_decryptors = sorted(int(j) for j in active_decryptors)
     tmcfe_ctx.round_meta[tmcfe_ctx.current_round] = RoundMeta(
@@ -444,6 +451,7 @@ def secure_aggregate_tmcfe(
         raise AggregationFailure("Total client weight is not positive")
     y_dict_by_enc_id = {tmcfe_ctx.uid_to_enc_id[uid]: int(client_weights[uid]) for uid in active_clients}
 
+    # Server(??) ->> Decryptor(??): generate this round's dynamic dkj for active clients/label only.
     t0 = time.time()
     tmcfe_ctx.dk_dict = tmcfe_ctx.tmcfe.dk_generate(y_dict_by_enc_id, label)
     dk_generate_time = time.time() - t0
@@ -644,6 +652,7 @@ def sanity_check_secure_aggregation(cfg):
     sane_cfg.simulate_replay_attack = False
 
     ctx = TMCFEContext(sane_cfg, fake_clients)
+    ctx.setup_system()
     ctx.current_round = 1
     label = _build_round_label(
         experiment_id="sanity_check",
@@ -728,7 +737,8 @@ def train_fedavg_tmcfe(cfg):
     tmcfe_ctx = None
     if cfg.method == "fedavg_tmcfe":
         tmcfe_ctx = TMCFEContext(cfg, users)
-        tmcfe_ctx.ensure_setup()
+        # Phase 1 (one-time): setup and sk_distribute for all potential clients before round 1.
+        tmcfe_ctx.setup_system()
 
     records = []
     for r in range(1, int(cfg.num_rounds) + 1):

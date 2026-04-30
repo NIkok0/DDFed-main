@@ -5,7 +5,7 @@ import time
 import sys
 import math
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 
 import numpy as np
 import pandas as pd
@@ -100,6 +100,77 @@ def _weighted_average_deltas(client_deltas: List[Dict[str, torch.Tensor]], clien
     return out
 
 
+
+
+class DDFedContext:
+    """Persistent RoDot+ (DDFed) system context for one FL experiment.
+
+    Phase 1 is executed exactly once before the first FL round:
+      Server -> Client/Decryptor: rodot.setup public parameters.
+      Client -> Client: every potential client runs kgen to keep its sk.
+      Client -> Server -> Decryptor: every client sends dkshare to decryptors.
+      Decryptor -> Decryptor: every decryptor runs dkcom to persist dkj.
+    """
+
+    def __init__(self, cfg, all_client_ids: List, all_client_weights: Optional[Dict] = None):
+        self.cfg = cfg
+        self.all_client_ids = sorted(list(all_client_ids))
+        self.uid_to_enc_id = {uid: idx + 1 for idx, uid in enumerate(self.all_client_ids)}
+        self.enc_id_to_uid = {idx + 1: uid for idx, uid in enumerate(self.all_client_ids)}
+        self.all_client_weights = all_client_weights or {uid: 1 for uid in self.all_client_ids}
+        self.k_dict_all = {self.uid_to_enc_id[uid]: int(self.all_client_weights[uid]) for uid in self.all_client_ids}
+        self.num_encryptors = len(self.all_client_ids)
+        self.num_decryptors = int(cfg.num_decryptors)
+        self.threshold = int(cfg.threshold)
+        self.quantization_scale = int(cfg.quantization_scale)
+
+        self.rodot = None
+        self.public_params = None
+        self.sk_dict: Dict[int, object] = {}
+        self.dk_j_dict: Dict[int, Dict[int, object]] = {}
+        self.setup_done = False
+
+        ddfed_root = Path(cfg.ddfed_project_root).resolve()
+        if str(ddfed_root) not in sys.path:
+            sys.path.append(str(ddfed_root))
+        from ddfed_crypto.rodot_plus import RodotPlus  # noqa: WPS433
+        self._rodot_cls = RodotPlus
+
+    def setup_system(self) -> None:
+        if self.setup_done:
+            return
+        if self.num_decryptors < self.threshold:
+            raise ValueError("num_decryptors must be >= threshold")
+
+        # Server(??) ->> Client, Decryptor(??): one-time RoDot+ setup.
+        self.rodot = self._rodot_cls()
+        self.public_params = self.rodot.setup(
+            lam=int(self.cfg.lambda_sec),
+            n=self.num_decryptors,
+            t=self.threshold,
+        )
+
+        # Client(??) ->> Client: all potential clients generate and persist sk_i.
+        self.sk_dict = {enc_id: self.rodot.kgen(enc_id) for enc_id in range(1, self.num_encryptors + 1)}
+
+        # Client(??) ->> Server(??) ->> Decryptor(??): clients create dk shares for every decryptor.
+        all_dk_shares = {
+            enc_id: self.rodot.dkshare(self.sk_dict[enc_id], self.k_dict_all[enc_id])
+            for enc_id in range(1, self.num_encryptors + 1)
+        }
+
+        # Decryptor(??) ->> Decryptor: every decryptor combines received shares into dkj.
+        self.dk_j_dict = {}
+        for dec_id in range(1, self.num_decryptors + 1):
+            shares_for_j = {enc_id: all_dk_shares[enc_id][dec_id] for enc_id in all_dk_shares.keys()}
+            self.dk_j_dict[dec_id] = self.rodot.dkcom(shares_for_j, self.k_dict_all)
+        self.setup_done = True
+
+    def require_ready(self) -> None:
+        if not self.setup_done or self.rodot is None:
+            raise RuntimeError("DDFedContext.setup_system() must be called once before FL rounds")
+
+
 def _secure_scalar_weighted_sum_rodot(
     rodot,
     sk_dict: Dict[int, object],
@@ -161,6 +232,8 @@ def secure_aggregate_packed(
             raise ValueError("All deltas must share the same flattened length")
 
     q_vectors = [torch.round(v * quant_scale).to(torch.int64) for v in flat_deltas]
+    # Server keeps the uid -> RoDot+ encryptor id mapping stable across random sampling rounds.
+    client_ids_for_vectors = list(crypto_ctx.get("client_ids", active_clients))
     offset = 1 << (max(2, int(packing_value_bits)) - 1)
     slot_upper = 1 << int(slot_bits)
 
@@ -174,6 +247,8 @@ def secure_aggregate_packed(
         packed_vectors.append(blocks)
         packing_overflow = packing_overflow or bool(overflow)
         encoded_vectors.append(q_vec + int(offset))
+    packed_blocks_by_id = {int(client_ids_for_vectors[pos]): packed_vectors[pos] for pos in range(len(client_ids_for_vectors))}
+
     # Cross-slot carry protection for weighted aggregated slot sums.
     for idx in range(vec_len):
         weighted_encoded_sum = 0
@@ -209,7 +284,7 @@ def secure_aggregate_packed(
     for block_id in range(n_blocks):
         x_block = {}
         for i in active_clients:
-            packed_val = int(packed_vectors[i - 1][block_id])
+            packed_val = int(packed_blocks_by_id[int(i)][block_id])
             if packed_val.bit_length() > max_packed_bits:
                 raise OverflowError(
                     f"Packed plaintext bit-length overflow at block {block_id}: "
@@ -275,29 +350,44 @@ def secure_aggregate_ddfed(
     client_deltas: List[Dict[str, torch.Tensor]],
     client_weights: List[int],
     ddfed_config: Dict,
+    ddfed_ctx: Optional[DDFedContext] = None,
+    active_clients: Optional[List] = None,
 ) -> Tuple[Dict[str, torch.Tensor], Dict[str, float]]:
     """
-    Securely aggregate weighted model deltas via DDFed Rodot+.
-    Aggregator only receives the final weighted-average delta.
+    Phase-2-only DDFed aggregation: Client encrypt -> Server forward -> Decryptor pardec -> Server comdec.
+
+    Setup/key generation is intentionally excluded. Pass a DDFedContext that was initialized once before
+    the FL loop. If no context is supplied, a temporary context is created only for standalone sanity tests.
     """
-    ddfed_root = Path(ddfed_config["ddfed_project_root"]).resolve()
-    if str(ddfed_root) not in sys.path:
-        sys.path.append(str(ddfed_root))
-
-    from ddfed_crypto.rodot_plus import RodotPlus  # noqa: WPS433
-
     quant_scale = int(ddfed_config.get("quantization_scale", 100000))
-    lam = int(ddfed_config.get("lambda_sec", 128))
-    threshold = int(ddfed_config["threshold"])
-    num_decryptors = int(ddfed_config["num_decryptors"])
     pack_size = max(1, int(ddfed_config.get("secure_pack_size", 1)))
     packing_value_bits = int(ddfed_config.get("packing_value_bits", 32))
     force_packed_mode = bool(ddfed_config.get("force_packed_mode", False))
 
     if len(client_deltas) < 2:
         raise ValueError("Need at least 2 clients for secure aggregation.")
-    if num_decryptors < threshold:
-        raise ValueError("num_decryptors must be >= threshold.")
+    if int(sum(client_weights)) <= 0:
+        raise ValueError("sum of client weights must be positive")
+
+    if active_clients is None:
+        active_clients = list(range(1, len(client_deltas) + 1))
+    active_clients = list(active_clients)
+    if len(active_clients) != len(client_deltas):
+        raise ValueError("active_clients must align one-to-one with client_deltas")
+
+    # Standalone fallback for sanity checks: still follows one setup before this aggregation call.
+    if ddfed_ctx is None:
+        class _Cfg:  # lightweight adapter for DDFedContext
+            pass
+        tmp_cfg = _Cfg()
+        tmp_cfg.ddfed_project_root = ddfed_config["ddfed_project_root"]
+        tmp_cfg.threshold = int(ddfed_config["threshold"])
+        tmp_cfg.num_decryptors = int(ddfed_config["num_decryptors"])
+        tmp_cfg.quantization_scale = quant_scale
+        tmp_cfg.lambda_sec = int(ddfed_config.get("lambda_sec", 128))
+        ddfed_ctx = DDFedContext(tmp_cfg, active_clients, {uid: int(w) for uid, w in zip(active_clients, client_weights)})
+        ddfed_ctx.setup_system()
+    ddfed_ctx.require_ready()
 
     template = client_deltas[0]
     flat_deltas = [flatten_model_update(d).float() for d in client_deltas]
@@ -306,39 +396,31 @@ def secure_aggregate_ddfed(
         if int(v.numel()) != vec_len:
             raise ValueError("All deltas must have the same flattened length.")
 
-    # Signed encoding by decomposition: x = x_pos - x_neg
+    # Server(??): maintain stable uid -> encryptor-index mapping for this sampled round.
+    active_enc_ids = [ddfed_ctx.uid_to_enc_id[uid] for uid in active_clients]
+    decryptor_ids = list(range(1, int(ddfed_ctx.num_decryptors) + 1))
+    k_dict = {enc_id: int(w) for enc_id, w in zip(active_enc_ids, client_weights)}
+    rodot = ddfed_ctx.rodot
+    sk_dict = ddfed_ctx.sk_dict
+    dk_j_dict = ddfed_ctx.dk_j_dict
+
+    # Client(??): Quantization & Packing plaintext blocks after local training.
     q_vectors = [torch.round(v * quant_scale).to(torch.int64) for v in flat_deltas]
     pos_vectors = [torch.clamp(v, min=0) for v in q_vectors]
     neg_vectors = [torch.clamp(-v, min=0) for v in q_vectors]
 
-    n_clients = len(client_deltas)
-    client_ids = list(range(1, n_clients + 1))
-    decryptor_ids = list(range(1, num_decryptors + 1))
-    k_dict = {i: int(client_weights[i - 1]) for i in client_ids}
-
-    rodot = RodotPlus()
-    rodot.setup(lam=lam, n=num_decryptors, t=threshold)
-
-    sk_dict = {i: rodot.kgen(i) for i in client_ids}
-    all_dk_shares = {i: rodot.dkshare(sk_dict[i], k_dict[i]) for i in client_ids}
-    dk_j_dict = {}
-    for j in decryptor_ids:
-        shares_for_j = {i: all_dk_shares[i][j] for i in client_ids}
-        dk_j_dict[j] = rodot.dkcom(shares_for_j, k_dict)
-
     slot_bits, padding_bits = compute_slot_bits(
-        num_clients=n_clients,
+        num_clients=len(active_clients),
         quantization_scale=quant_scale,
         packing_value_bits=packing_value_bits,
     )
-    # Integer-weight aggregation enlarges slot sums; reserve extra bits for sum(weights).
     sum_w_int = int(sum(client_weights))
     slot_bits += int(math.ceil(math.log2(max(2, sum_w_int + 1))))
     if pack_size > 1 or force_packed_mode:
         packed_delta, packed_timing = secure_aggregate_packed(
             client_deltas=client_deltas,
             client_weights=client_weights,
-            active_clients=client_ids,
+            active_clients=active_enc_ids,
             active_decryptors=decryptor_ids,
             label=ddfed_config.get("label_base", "fedavg_ddfed_round"),
             crypto_ctx={
@@ -346,6 +428,7 @@ def secure_aggregate_ddfed(
                 "sk_dict": sk_dict,
                 "dk_j_dict": dk_j_dict,
                 "k_dict": k_dict,
+                "client_ids": active_enc_ids,
                 "quantization_scale": quant_scale,
                 "max_plaintext_bits": ddfed_config.get("max_plaintext_bits", 120),
                 "packing_value_bits": packing_value_bits,
@@ -376,10 +459,8 @@ def secure_aggregate_ddfed(
 
     idx = 0
     block_id = 0
-    sum_w_int = int(sum(client_weights))
     while idx < vec_len:
         remaining = vec_len - idx
-        # Bound per-coordinate digit to avoid carry on weighted sums.
         probe_len = min(pack_size, remaining)
         local_max = estimate_block_qmax(pos_vectors + neg_vectors, idx, probe_len)
         base = compute_safe_base(sum_w_int, local_max, margin=1)
@@ -401,21 +482,22 @@ def secure_aggregate_ddfed(
 
         x_pos = {}
         x_neg = {}
-        for i in client_ids:
-            pos_digits = [int(v.item()) for v in pos_vectors[i - 1][idx: idx + block_len]]
-            neg_digits = [int(v.item()) for v in neg_vectors[i - 1][idx: idx + block_len]]
-            x_pos[i] = pack_digits(pos_digits, base)
-            x_neg[i] = pack_digits(neg_digits, base)
+        for pos, enc_id in enumerate(active_enc_ids):
+            pos_digits = [int(v.item()) for v in pos_vectors[pos][idx: idx + block_len]]
+            neg_digits = [int(v.item()) for v in neg_vectors[pos][idx: idx + block_len]]
+            x_pos[enc_id] = pack_digits(pos_digits, base)
+            x_neg[enc_id] = pack_digits(neg_digits, base)
 
+        # Client(??) ->> Server(??) ->> Decryptor(??), then Decryptor ->> Server, Server combines.
         pos_sum, t_enc, t_par, t_com = _secure_scalar_weighted_sum_rodot(
-            rodot, sk_dict, dk_j_dict, k_dict, x_pos, f"wpos_blk_{block_id}", decryptor_ids
+            rodot, sk_dict, dk_j_dict, k_dict, x_pos, f"{ddfed_config.get('label_base', 'round')}|wpos_blk_{block_id}", decryptor_ids
         )
         t_enc_total += t_enc
         t_pardec_total += t_par
         t_comdec_total += t_com
 
         neg_sum, t_enc, t_par, t_com = _secure_scalar_weighted_sum_rodot(
-            rodot, sk_dict, dk_j_dict, k_dict, x_neg, f"wneg_blk_{block_id}", decryptor_ids
+            rodot, sk_dict, dk_j_dict, k_dict, x_neg, f"{ddfed_config.get('label_base', 'round')}|wneg_blk_{block_id}", decryptor_ids
         )
         t_enc_total += t_enc
         t_pardec_total += t_par
@@ -448,11 +530,10 @@ def secure_aggregate_ddfed(
         "padding_bits": int(padding_bits),
         "packing_overflow": False,
         "num_model_params": int(vec_len),
-        "num_ciphertexts": int(block_count) * int(len(client_ids)),
+        "num_ciphertexts": int(block_count) * int(len(active_enc_ids)),
         "compression_ratio": float(vec_len) / float(max(1, block_count)),
     }
     return delta_global, timing
-
 
 def _build_server_args(cfg):
     # Reuse existing FedAvgServer setup, keep training logic unchanged.
@@ -496,6 +577,13 @@ def train_fedavg_ddfed(cfg):
     users = list(server.users)
     n_total = len(users)
     n_participate = max(1, int(round(n_total * cfg.participation_rate)))
+
+    ddfed_ctx = None
+    if cfg.method == "fedavg_ddfed":
+        # Phase 1 (one-time): setup all potential clients, not only clients sampled in round 1.
+        all_client_weights = {uid: int(len(server.client_instances[uid].trainset)) for uid in users}
+        ddfed_ctx = DDFedContext(cfg, users, all_client_weights)
+        ddfed_ctx.setup_system()
 
     records = []
     train_start = time.time()
@@ -554,6 +642,8 @@ def train_fedavg_ddfed(cfg):
                     "skip_zero_blocks": cfg.skip_zero_blocks,
                     "label_base": f"round_{r}",
                 },
+                ddfed_ctx=ddfed_ctx,
+                active_clients=participants,
             )
             enc_t = tinfo["encryption_time"]
             par_t = tinfo["partial_decryption_time"]
