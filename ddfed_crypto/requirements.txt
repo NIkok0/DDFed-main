@@ -1,0 +1,22 @@
+# =============================================================================
+# ddfed_crypto — 依赖说明（与 ddfed_fl / ddfed_fu 区分）
+# =============================================================================
+# 本目录代码（rodot_plus、tmcfe、dmcfe_ip、shamir_ss、math_utils 等）仅使用
+# 标准库与 gmpy2；不包含 PyTorch 联邦训练逻辑。
+#
+# - ddfed_fl：FedAvg + 安全聚合训练，需 torch / torchvision 等，见 ddfed_fl/README.md
+# - ddfed_fu：FedEraser 等，需 torch、scikit-learn、xgboost 等（本文件不包含）
+# =============================================================================
+
+# --- 运行 ddfed_crypto 核心协议（必需）---
+gmpy2>=2.1.0
+
+# --- 可选：DDMCFE / AoNE 使用真实双线性配对（charm）---
+# 未安装时自动回退到 baselines/pairing_mock.py（开发/测试用，非真实配对安全）。
+# Windows 上 charm-crypto 常依赖 PBC 与本地编译环境，安装失败可跳过。
+# charm-crypto>=0.43
+
+# --- 可选：项目根目录 tests/ 下矩阵与导出脚本 ---
+# 例如 run_tmcfe_rodot_matrix.py、run_and_export_time_benchmarks.py、run_dropout_client_matrix.py
+pandas>=1.3.0
+matplotlib>=3.5.0

@@ -57,7 +57,9 @@ def MIA_attack(target_model, shadow_model, shadow_client_loaders, shadow_test_lo
     n_class_dict['adult'] = 2
     n_class_dict['purchase'] = 2
     n_class_dict['mnist'] = 10
+    n_class_dict['fashion-mnist'] = 10
     n_class_dict['cifar10'] = 10
+    n_class_dict['imagenet'] = 1000
     
     N_class = n_class_dict[FL_params.data_name]
     
@@ -168,7 +170,9 @@ def attack(target_model, attack_model, client_loaders, test_loader, FL_params):
     n_class_dict['adult'] = 2
     n_class_dict['purchase'] = 2
     n_class_dict['mnist'] = 10
+    n_class_dict['fashion-mnist'] = 10
     n_class_dict['cifar10'] = 10
+    n_class_dict['imagenet'] = 1000
     
     N_class = n_class_dict[FL_params.data_name]
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -243,7 +247,9 @@ def train_attack_model(shadow_old_GM, shadow_client_loaders, shadow_test_loader,
     n_class_dict['adult'] = 2
     n_class_dict['purchase'] = 2
     n_class_dict['mnist'] = 10
+    n_class_dict['fashion-mnist'] = 10
     n_class_dict['cifar10'] = 10
+    n_class_dict['imagenet'] = 1000
     
     N_class = n_class_dict[FL_params.data_name]
     

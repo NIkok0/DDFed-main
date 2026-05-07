@@ -1,16 +1,21 @@
 # run_experiments.py
 # 调度脚本：并行运行多个联邦学习实验
 # 控制变量：参与客户端数量（10,20,30,40,50）
-# 数据集：fashion-mnist, imagenet
+# 默认数据集为可自动下载的 MNIST / Fashion-MNIST；ImageNet 需自备数据，加入列表前请先准备 ./data/imagenet
 
 import multiprocessing as mp
 import subprocess
 import os
+import sys
 import time
 from datetime import datetime
 
-# 实验配置
-DATASETS = ["fashion-mnist", "imagenet"]
+# 与脚本同目录，避免依赖错误的 "Federated unlearning/..." 相对路径
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+_MAIN = os.path.join(_SCRIPT_DIR, "Fed_Unlearn_main.py")
+
+# 实验配置（ImageNet 需手动放置数据后再加入 DATASETS）
+DATASETS = ["mnist", "fashion-mnist"]
 CLIENT_COUNTS = [10, 20, 30, 40, 50]
 
 # 其他实验参数（可根据需要调整）
@@ -22,8 +27,10 @@ OTHER_PARAMS = {
     "seed": 1,
 }
 
-def run_experiment(dataset, n_clients, log_dir="logs"):
+def run_experiment(dataset, n_clients, log_dir=None):
     """运行单个实验"""
+    if log_dir is None:
+        log_dir = os.path.join(_SCRIPT_DIR, "logs")
     os.makedirs(log_dir, exist_ok=True)
     
     # 创建实验标识符
@@ -31,11 +38,17 @@ def run_experiment(dataset, n_clients, log_dir="logs"):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_file = os.path.join(log_dir, f"{exp_id}_{timestamp}.log")
     
-    # 构建命令 - 传递客户端数量参数
-    cmd = f'python "Federated unlearning/FedEraser-Code/Fed_Unlearn_main.py" --data_name {dataset} --n_clients {n_clients}'
-    
+    cmd = [
+        sys.executable,
+        _MAIN,
+        "--data_name",
+        dataset,
+        "--n_clients",
+        str(n_clients),
+    ]
+
     print(f"[{timestamp}] Starting: {exp_id}")
-    print(f"  Command: {cmd}")
+    print(f"  Command: {' '.join(cmd)}")
     print(f"  Log file: {log_file}")
     
     # 执行实验
@@ -51,11 +64,11 @@ def run_experiment(dataset, n_clients, log_dir="logs"):
         
         process = subprocess.Popen(
             cmd,
-            shell=True,
+            cwd=_SCRIPT_DIR,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
-            bufsize=1
+            bufsize=1,
         )
         
         # 实时写入日志
@@ -120,8 +133,11 @@ def main():
     print("="*60)
     
     # 保存结果到文件
-    result_file = f"logs/experiment_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
-    os.makedirs("logs", exist_ok=True)
+    logs_dir = os.path.join(_SCRIPT_DIR, "logs")
+    result_file = os.path.join(
+        logs_dir, f"experiment_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+    )
+    os.makedirs(logs_dir, exist_ok=True)
     with open(result_file, "w", encoding="utf-8") as f:
         f.write("Experiment Results\n")
         f.write("="*60 + "\n")
