@@ -48,6 +48,8 @@ def parse_args():
                         help='Local batch size')
     parser.add_argument('--seed', type=int, default=1,
                         help='Random seed')
+    parser.add_argument('--skip_mia', action='store_true',
+                        help='Skip Step4 membership inference (smoke tests / avoid XGBoost native crashes)')
     return parser.parse_args()
 
 class Arguments():
@@ -62,6 +64,7 @@ class Arguments():
             self.local_lr = cmd_args.local_lr
             self.local_batch_size = cmd_args.local_batch_size
             self.seed = cmd_args.seed
+            self.skip_mia = getattr(cmd_args, 'skip_mia', False)
         else:
             # Default values
             self.N_total_client = 100
@@ -72,6 +75,7 @@ class Arguments():
             self.local_lr = 0.005
             self.local_batch_size = 64
             self.seed = 1
+            self.skip_mia = False
         
         #Model Training Settings (使用从命令行或默认值传入的值)
         self.local_batch_size = self.local_batch_size if hasattr(self, 'local_batch_size') else 64
@@ -145,28 +149,32 @@ def Federated_Unlearning(cmd_args=None):
     """Step 4  The member inference attack model is built based on the output of the Target Global Model on client_loaders and test_loaders.In this case, we only do the MIA attack on the model at the end of the training"""
     
     """MIA:Based on the output of oldGM model, MIA attack model was built, and then the attack model was used to attack unlearn GM. If the attack accuracy significantly decreased, it indicated that our unlearn method was indeed effective to remove the user's information"""
-    print(60*'=')
-    print("Step4. Membership Inference Attack aganist GM...")
+    if getattr(FL_params, 'skip_mia', False):
+        print(60*'=')
+        print("Step4. Membership Inference Attack skipped (--skip_mia).")
+    else:
+        print(60*'=')
+        print("Step4. Membership Inference Attack aganist GM...")
 
-    T_epoch = -1
-    # MIA setting:Target model == Shadow Model
-    old_GM = old_GMs[T_epoch]
-    attack_model = train_attack_model(old_GM, client_loaders, test_loader, FL_params)
+        T_epoch = -1
+        # MIA setting:Target model == Shadow Model
+        old_GM = old_GMs[T_epoch]
+        attack_model = train_attack_model(old_GM, client_loaders, test_loader, FL_params)
 
 
-    print("\nEpoch  = {}".format(T_epoch))
-    print("Attacking against FL Standard  ")
-    target_model = old_GMs[T_epoch]
-    (ACC_old, PRE_old) = attack(target_model, attack_model, client_loaders, test_loader, FL_params)
+        print("\nEpoch  = {}".format(T_epoch))
+        print("Attacking against FL Standard  ")
+        target_model = old_GMs[T_epoch]
+        (ACC_old, PRE_old) = attack(target_model, attack_model, client_loaders, test_loader, FL_params)
 
-    if(FL_params.if_retrain == True):
-        print("Attacking against FL Retrain  ")
-        target_model = retrain_GMs[T_epoch]
-        (ACC_retrain, PRE_retrain) = attack(target_model, attack_model, client_loaders, test_loader, FL_params)
+        if(FL_params.if_retrain == True):
+            print("Attacking against FL Retrain  ")
+            target_model = retrain_GMs[T_epoch]
+            (ACC_retrain, PRE_retrain) = attack(target_model, attack_model, client_loaders, test_loader, FL_params)
 
-    print("Attacking against FL Unlearn  ")
-    target_model = unlearn_GMs[T_epoch]
-    (ACC_unlearn, PRE_unlearn) = attack(target_model, attack_model, client_loaders, test_loader, FL_params)
+        print("Attacking against FL Unlearn  ")
+        target_model = unlearn_GMs[T_epoch]
+        (ACC_unlearn, PRE_unlearn) = attack(target_model, attack_model, client_loaders, test_loader, FL_params)
 
 
 
