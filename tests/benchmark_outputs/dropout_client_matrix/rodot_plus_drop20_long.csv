@@ -1,41 +1,41 @@
 scheme,drop_rate,clients,stage,time_ms
-rodot_plus,20,10,Setup,42.551
+rodot_plus,20,10,Setup,40.5
 rodot_plus,20,10,KGen,0.002
 rodot_plus,20,10,DKShare,0.257
-rodot_plus,20,10,Enc,0.073
+rodot_plus,20,10,Enc,0.077
 rodot_plus,20,10,DKCom,0.001
-rodot_plus,20,10,ParDec,0.093
-rodot_plus,20,10,ComDec,0.036
-rodot_plus,20,10,Total pipeline,43.013
-rodot_plus,20,20,Setup,42.896
-rodot_plus,20,20,KGen,0.002
-rodot_plus,20,20,DKShare,0.255
-rodot_plus,20,20,Enc,0.072
+rodot_plus,20,10,ParDec,0.097
+rodot_plus,20,10,ComDec,0.037
+rodot_plus,20,10,Total pipeline,40.971
+rodot_plus,20,20,Setup,42.791
+rodot_plus,20,20,KGen,0.001
+rodot_plus,20,20,DKShare,0.264
+rodot_plus,20,20,Enc,0.074
 rodot_plus,20,20,DKCom,0.001
-rodot_plus,20,20,ParDec,0.099
-rodot_plus,20,20,ComDec,0.041
-rodot_plus,20,20,Total pipeline,43.366
-rodot_plus,20,30,Setup,41.452
-rodot_plus,20,30,KGen,0.002
-rodot_plus,20,30,DKShare,0.257
-rodot_plus,20,30,Enc,0.071
+rodot_plus,20,20,ParDec,0.102
+rodot_plus,20,20,ComDec,0.04
+rodot_plus,20,20,Total pipeline,43.275
+rodot_plus,20,30,Setup,43.279
+rodot_plus,20,30,KGen,0.001
+rodot_plus,20,30,DKShare,0.27
+rodot_plus,20,30,Enc,0.075
 rodot_plus,20,30,DKCom,0.002
-rodot_plus,20,30,ParDec,0.108
-rodot_plus,20,30,ComDec,0.044
-rodot_plus,20,30,Total pipeline,41.936
-rodot_plus,20,40,Setup,41.318
-rodot_plus,20,40,KGen,0.002
-rodot_plus,20,40,DKShare,0.256
-rodot_plus,20,40,Enc,0.072
+rodot_plus,20,30,ParDec,0.113
+rodot_plus,20,30,ComDec,0.046
+rodot_plus,20,30,Total pipeline,43.787
+rodot_plus,20,40,Setup,43.617
+rodot_plus,20,40,KGen,0.001
+rodot_plus,20,40,DKShare,0.266
+rodot_plus,20,40,Enc,0.074
 rodot_plus,20,40,DKCom,0.003
-rodot_plus,20,40,ParDec,0.114
-rodot_plus,20,40,ComDec,0.046
-rodot_plus,20,40,Total pipeline,41.811
-rodot_plus,20,50,Setup,41.273
+rodot_plus,20,40,ParDec,0.119
+rodot_plus,20,40,ComDec,0.047
+rodot_plus,20,40,Total pipeline,44.127
+rodot_plus,20,50,Setup,42.761
 rodot_plus,20,50,KGen,0.002
-rodot_plus,20,50,DKShare,0.255
-rodot_plus,20,50,Enc,0.071
-rodot_plus,20,50,DKCom,0.003
-rodot_plus,20,50,ParDec,0.12
-rodot_plus,20,50,ComDec,0.051
-rodot_plus,20,50,Total pipeline,41.774
+rodot_plus,20,50,DKShare,0.267
+rodot_plus,20,50,Enc,0.074
+rodot_plus,20,50,DKCom,0.004
+rodot_plus,20,50,ParDec,0.124
+rodot_plus,20,50,ComDec,0.052
+rodot_plus,20,50,Total pipeline,43.283

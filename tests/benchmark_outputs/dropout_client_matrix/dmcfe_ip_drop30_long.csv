@@ -1,46 +1,46 @@
 scheme,drop_rate,clients,stage,time_ms
-dmcfe_ip,30,10,Global Setup,60.844
+dmcfe_ip,30,10,Global Setup,64.804
 dmcfe_ip,30,10,Client Setup,0.008
 dmcfe_ip,30,10,Client: Step 1 Agree on weight Y,0.007
-dmcfe_ip,30,10,Client: Step 2 Key Sharing,0.542
-dmcfe_ip,30,10,Client: Step 3 Encryption,0.08
-dmcfe_ip,30,10,Server: Step 1 Verify weight Y,0.061
-dmcfe_ip,30,10,Server: Step 4 Aggregation,0.225
-dmcfe_ip,30,10,Client Aggregation Phase Total,0.629
-dmcfe_ip,30,10,Server Aggregation Phase Total,0.28600000000000003
-dmcfe_ip,30,20,Global Setup,57.796
-dmcfe_ip,30,20,Client Setup,0.007
+dmcfe_ip,30,10,Client: Step 2 Key Sharing,0.561
+dmcfe_ip,30,10,Client: Step 3 Encryption,0.083
+dmcfe_ip,30,10,Server: Step 1 Verify weight Y,0.064
+dmcfe_ip,30,10,Server: Step 4 Aggregation,0.239
+dmcfe_ip,30,10,Client Aggregation Phase Total,0.651
+dmcfe_ip,30,10,Server Aggregation Phase Total,0.303
+dmcfe_ip,30,20,Global Setup,62.549
+dmcfe_ip,30,20,Client Setup,0.008
 dmcfe_ip,30,20,Client: Step 1 Agree on weight Y,0.007
-dmcfe_ip,30,20,Client: Step 2 Key Sharing,0.686
-dmcfe_ip,30,20,Client: Step 3 Encryption,0.131
-dmcfe_ip,30,20,Server: Step 1 Verify weight Y,0.12
-dmcfe_ip,30,20,Server: Step 4 Aggregation,0.959
-dmcfe_ip,30,20,Client Aggregation Phase Total,0.8240000000000001
-dmcfe_ip,30,20,Server Aggregation Phase Total,1.079
-dmcfe_ip,30,30,Global Setup,63.008
+dmcfe_ip,30,20,Client: Step 2 Key Sharing,0.719
+dmcfe_ip,30,20,Client: Step 3 Encryption,0.136
+dmcfe_ip,30,20,Server: Step 1 Verify weight Y,0.126
+dmcfe_ip,30,20,Server: Step 4 Aggregation,0.984
+dmcfe_ip,30,20,Client Aggregation Phase Total,0.862
+dmcfe_ip,30,20,Server Aggregation Phase Total,1.1099999999999999
+dmcfe_ip,30,30,Global Setup,63.507
 dmcfe_ip,30,30,Client Setup,0.008
 dmcfe_ip,30,30,Client: Step 1 Agree on weight Y,0.007
-dmcfe_ip,30,30,Client: Step 2 Key Sharing,0.927
-dmcfe_ip,30,30,Client: Step 3 Encryption,0.18
-dmcfe_ip,30,30,Server: Step 1 Verify weight Y,0.181
-dmcfe_ip,30,30,Server: Step 4 Aggregation,2.494
-dmcfe_ip,30,30,Client Aggregation Phase Total,1.114
-dmcfe_ip,30,30,Server Aggregation Phase Total,2.6750000000000003
-dmcfe_ip,30,40,Global Setup,61.307
+dmcfe_ip,30,30,Client: Step 2 Key Sharing,0.962
+dmcfe_ip,30,30,Client: Step 3 Encryption,0.187
+dmcfe_ip,30,30,Server: Step 1 Verify weight Y,0.188
+dmcfe_ip,30,30,Server: Step 4 Aggregation,2.604
+dmcfe_ip,30,30,Client Aggregation Phase Total,1.156
+dmcfe_ip,30,30,Server Aggregation Phase Total,2.7920000000000003
+dmcfe_ip,30,40,Global Setup,63.061
 dmcfe_ip,30,40,Client Setup,0.008
-dmcfe_ip,30,40,Client: Step 1 Agree on weight Y,0.006
-dmcfe_ip,30,40,Client: Step 2 Key Sharing,1.242
-dmcfe_ip,30,40,Client: Step 3 Encryption,0.232
-dmcfe_ip,30,40,Server: Step 1 Verify weight Y,0.242
-dmcfe_ip,30,40,Server: Step 4 Aggregation,5.242
-dmcfe_ip,30,40,Client Aggregation Phase Total,1.48
-dmcfe_ip,30,40,Server Aggregation Phase Total,5.484
-dmcfe_ip,30,50,Global Setup,63.899
+dmcfe_ip,30,40,Client: Step 1 Agree on weight Y,0.007
+dmcfe_ip,30,40,Client: Step 2 Key Sharing,1.301
+dmcfe_ip,30,40,Client: Step 3 Encryption,0.238
+dmcfe_ip,30,40,Server: Step 1 Verify weight Y,0.249
+dmcfe_ip,30,40,Server: Step 4 Aggregation,5.492
+dmcfe_ip,30,40,Client Aggregation Phase Total,1.5459999999999998
+dmcfe_ip,30,40,Server Aggregation Phase Total,5.741
+dmcfe_ip,30,50,Global Setup,63.272
 dmcfe_ip,30,50,Client Setup,0.008
 dmcfe_ip,30,50,Client: Step 1 Agree on weight Y,0.006
-dmcfe_ip,30,50,Client: Step 2 Key Sharing,1.651
-dmcfe_ip,30,50,Client: Step 3 Encryption,0.283
-dmcfe_ip,30,50,Server: Step 1 Verify weight Y,0.303
-dmcfe_ip,30,50,Server: Step 4 Aggregation,9.65
-dmcfe_ip,30,50,Client Aggregation Phase Total,1.94
-dmcfe_ip,30,50,Server Aggregation Phase Total,9.953000000000001
+dmcfe_ip,30,50,Client: Step 2 Key Sharing,1.665
+dmcfe_ip,30,50,Client: Step 3 Encryption,0.288
+dmcfe_ip,30,50,Server: Step 1 Verify weight Y,0.309
+dmcfe_ip,30,50,Server: Step 4 Aggregation,9.731
+dmcfe_ip,30,50,Client Aggregation Phase Total,1.959
+dmcfe_ip,30,50,Server Aggregation Phase Total,10.04

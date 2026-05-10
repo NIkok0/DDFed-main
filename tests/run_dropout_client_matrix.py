@@ -15,7 +15,7 @@ OUT_DIR = ROOT / "benchmark_outputs" / "dropout_client_matrix"
 
 CLIENT_COUNTS = [10, 20, 30, 40, 50]
 DROPOUT_RATES = [0.10, 0.20, 0.30]
-DMCFE_ITER = 1
+DMCFE_ITER = 500
 RODOT_ITER = 500
 
 DMCFE_STAGE_ORDER = [

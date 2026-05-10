@@ -1,121 +1,256 @@
 scheme,drop_rate,clients,stage,time_ms
-rodot_plus,10,10,Setup,40.689
+dmcfe_ip,10,10,Global Setup,61.916
+dmcfe_ip,10,10,Client Setup,0.008
+dmcfe_ip,10,10,Client: Step 1 Agree on weight Y,0.007
+dmcfe_ip,10,10,Client: Step 2 Key Sharing,0.551
+dmcfe_ip,10,10,Client: Step 3 Encryption,0.082
+dmcfe_ip,10,10,Server: Step 1 Verify weight Y,0.08
+dmcfe_ip,10,10,Server: Step 4 Aggregation,0.128
+dmcfe_ip,10,10,Client Aggregation Phase Total,0.64
+dmcfe_ip,10,10,Server Aggregation Phase Total,0.20800000000000002
+dmcfe_ip,10,20,Global Setup,60.703
+dmcfe_ip,10,20,Client Setup,0.008
+dmcfe_ip,10,20,Client: Step 1 Agree on weight Y,0.007
+dmcfe_ip,10,20,Client: Step 2 Key Sharing,0.697
+dmcfe_ip,10,20,Client: Step 3 Encryption,0.131
+dmcfe_ip,10,20,Server: Step 1 Verify weight Y,0.157
+dmcfe_ip,10,20,Server: Step 4 Aggregation,0.412
+dmcfe_ip,10,20,Client Aggregation Phase Total,0.835
+dmcfe_ip,10,20,Server Aggregation Phase Total,0.569
+dmcfe_ip,10,30,Global Setup,60.421
+dmcfe_ip,10,30,Client Setup,0.008
+dmcfe_ip,10,30,Client: Step 1 Agree on weight Y,0.007
+dmcfe_ip,10,30,Client: Step 2 Key Sharing,0.929
+dmcfe_ip,10,30,Client: Step 3 Encryption,0.188
+dmcfe_ip,10,30,Server: Step 1 Verify weight Y,0.239
+dmcfe_ip,10,30,Server: Step 4 Aggregation,1.015
+dmcfe_ip,10,30,Client Aggregation Phase Total,1.124
+dmcfe_ip,10,30,Server Aggregation Phase Total,1.254
+dmcfe_ip,10,40,Global Setup,63.058
+dmcfe_ip,10,40,Client Setup,0.008
+dmcfe_ip,10,40,Client: Step 1 Agree on weight Y,0.007
+dmcfe_ip,10,40,Client: Step 2 Key Sharing,1.272
+dmcfe_ip,10,40,Client: Step 3 Encryption,0.239
+dmcfe_ip,10,40,Server: Step 1 Verify weight Y,0.315
+dmcfe_ip,10,40,Server: Step 4 Aggregation,2.051
+dmcfe_ip,10,40,Client Aggregation Phase Total,1.5179999999999998
+dmcfe_ip,10,40,Server Aggregation Phase Total,2.366
+dmcfe_ip,10,50,Global Setup,62.581
+dmcfe_ip,10,50,Client Setup,0.008
+dmcfe_ip,10,50,Client: Step 1 Agree on weight Y,0.007
+dmcfe_ip,10,50,Client: Step 2 Key Sharing,1.677
+dmcfe_ip,10,50,Client: Step 3 Encryption,0.297
+dmcfe_ip,10,50,Server: Step 1 Verify weight Y,0.405
+dmcfe_ip,10,50,Server: Step 4 Aggregation,3.593
+dmcfe_ip,10,50,Client Aggregation Phase Total,1.9809999999999999
+dmcfe_ip,10,50,Server Aggregation Phase Total,3.998
+dmcfe_ip,20,10,Global Setup,62.95
+dmcfe_ip,20,10,Client Setup,0.008
+dmcfe_ip,20,10,Client: Step 1 Agree on weight Y,0.007
+dmcfe_ip,20,10,Client: Step 2 Key Sharing,0.553
+dmcfe_ip,20,10,Client: Step 3 Encryption,0.081
+dmcfe_ip,20,10,Server: Step 1 Verify weight Y,0.073
+dmcfe_ip,20,10,Server: Step 4 Aggregation,0.186
+dmcfe_ip,20,10,Client Aggregation Phase Total,0.641
+dmcfe_ip,20,10,Server Aggregation Phase Total,0.259
+dmcfe_ip,20,20,Global Setup,62.064
+dmcfe_ip,20,20,Client Setup,0.007
+dmcfe_ip,20,20,Client: Step 1 Agree on weight Y,0.007
+dmcfe_ip,20,20,Client: Step 2 Key Sharing,0.69
+dmcfe_ip,20,20,Client: Step 3 Encryption,0.134
+dmcfe_ip,20,20,Server: Step 1 Verify weight Y,0.142
+dmcfe_ip,20,20,Server: Step 4 Aggregation,0.714
+dmcfe_ip,20,20,Client Aggregation Phase Total,0.831
+dmcfe_ip,20,20,Server Aggregation Phase Total,0.856
+dmcfe_ip,20,30,Global Setup,63.195
+dmcfe_ip,20,30,Client Setup,0.008
+dmcfe_ip,20,30,Client: Step 1 Agree on weight Y,0.007
+dmcfe_ip,20,30,Client: Step 2 Key Sharing,0.95
+dmcfe_ip,20,30,Client: Step 3 Encryption,0.19
+dmcfe_ip,20,30,Server: Step 1 Verify weight Y,0.213
+dmcfe_ip,20,30,Server: Step 4 Aggregation,1.94
+dmcfe_ip,20,30,Client Aggregation Phase Total,1.147
+dmcfe_ip,20,30,Server Aggregation Phase Total,2.153
+dmcfe_ip,20,40,Global Setup,60.767
+dmcfe_ip,20,40,Client Setup,0.008
+dmcfe_ip,20,40,Client: Step 1 Agree on weight Y,0.006
+dmcfe_ip,20,40,Client: Step 2 Key Sharing,1.253
+dmcfe_ip,20,40,Client: Step 3 Encryption,0.231
+dmcfe_ip,20,40,Server: Step 1 Verify weight Y,0.276
+dmcfe_ip,20,40,Server: Step 4 Aggregation,3.699
+dmcfe_ip,20,40,Client Aggregation Phase Total,1.49
+dmcfe_ip,20,40,Server Aggregation Phase Total,3.9749999999999996
+dmcfe_ip,20,50,Global Setup,64.945
+dmcfe_ip,20,50,Client Setup,0.008
+dmcfe_ip,20,50,Client: Step 1 Agree on weight Y,0.007
+dmcfe_ip,20,50,Client: Step 2 Key Sharing,1.737
+dmcfe_ip,20,50,Client: Step 3 Encryption,0.306
+dmcfe_ip,20,50,Server: Step 1 Verify weight Y,0.366
+dmcfe_ip,20,50,Server: Step 4 Aggregation,7.341
+dmcfe_ip,20,50,Client Aggregation Phase Total,2.05
+dmcfe_ip,20,50,Server Aggregation Phase Total,7.707
+dmcfe_ip,30,10,Global Setup,64.804
+dmcfe_ip,30,10,Client Setup,0.008
+dmcfe_ip,30,10,Client: Step 1 Agree on weight Y,0.007
+dmcfe_ip,30,10,Client: Step 2 Key Sharing,0.561
+dmcfe_ip,30,10,Client: Step 3 Encryption,0.083
+dmcfe_ip,30,10,Server: Step 1 Verify weight Y,0.064
+dmcfe_ip,30,10,Server: Step 4 Aggregation,0.239
+dmcfe_ip,30,10,Client Aggregation Phase Total,0.651
+dmcfe_ip,30,10,Server Aggregation Phase Total,0.303
+dmcfe_ip,30,20,Global Setup,62.549
+dmcfe_ip,30,20,Client Setup,0.008
+dmcfe_ip,30,20,Client: Step 1 Agree on weight Y,0.007
+dmcfe_ip,30,20,Client: Step 2 Key Sharing,0.719
+dmcfe_ip,30,20,Client: Step 3 Encryption,0.136
+dmcfe_ip,30,20,Server: Step 1 Verify weight Y,0.126
+dmcfe_ip,30,20,Server: Step 4 Aggregation,0.984
+dmcfe_ip,30,20,Client Aggregation Phase Total,0.862
+dmcfe_ip,30,20,Server Aggregation Phase Total,1.1099999999999999
+dmcfe_ip,30,30,Global Setup,63.507
+dmcfe_ip,30,30,Client Setup,0.008
+dmcfe_ip,30,30,Client: Step 1 Agree on weight Y,0.007
+dmcfe_ip,30,30,Client: Step 2 Key Sharing,0.962
+dmcfe_ip,30,30,Client: Step 3 Encryption,0.187
+dmcfe_ip,30,30,Server: Step 1 Verify weight Y,0.188
+dmcfe_ip,30,30,Server: Step 4 Aggregation,2.604
+dmcfe_ip,30,30,Client Aggregation Phase Total,1.156
+dmcfe_ip,30,30,Server Aggregation Phase Total,2.7920000000000003
+dmcfe_ip,30,40,Global Setup,63.061
+dmcfe_ip,30,40,Client Setup,0.008
+dmcfe_ip,30,40,Client: Step 1 Agree on weight Y,0.007
+dmcfe_ip,30,40,Client: Step 2 Key Sharing,1.301
+dmcfe_ip,30,40,Client: Step 3 Encryption,0.238
+dmcfe_ip,30,40,Server: Step 1 Verify weight Y,0.249
+dmcfe_ip,30,40,Server: Step 4 Aggregation,5.492
+dmcfe_ip,30,40,Client Aggregation Phase Total,1.5459999999999998
+dmcfe_ip,30,40,Server Aggregation Phase Total,5.741
+dmcfe_ip,30,50,Global Setup,63.272
+dmcfe_ip,30,50,Client Setup,0.008
+dmcfe_ip,30,50,Client: Step 1 Agree on weight Y,0.006
+dmcfe_ip,30,50,Client: Step 2 Key Sharing,1.665
+dmcfe_ip,30,50,Client: Step 3 Encryption,0.288
+dmcfe_ip,30,50,Server: Step 1 Verify weight Y,0.309
+dmcfe_ip,30,50,Server: Step 4 Aggregation,9.731
+dmcfe_ip,30,50,Client Aggregation Phase Total,1.959
+dmcfe_ip,30,50,Server Aggregation Phase Total,10.04
+rodot_plus,10,10,Setup,41.977
 rodot_plus,10,10,KGen,0.002
-rodot_plus,10,10,DKShare,0.255
-rodot_plus,10,10,Enc,0.072
+rodot_plus,10,10,DKShare,0.257
+rodot_plus,10,10,Enc,0.073
 rodot_plus,10,10,DKCom,0.001
-rodot_plus,10,10,ParDec,0.092
+rodot_plus,10,10,ParDec,0.093
 rodot_plus,10,10,ComDec,0.037
-rodot_plus,10,10,Total pipeline,41.147
-rodot_plus,10,20,Setup,40.304
-rodot_plus,10,20,KGen,0.002
+rodot_plus,10,10,Total pipeline,42.441
+rodot_plus,10,20,Setup,41.219
+rodot_plus,10,20,KGen,0.001
 rodot_plus,10,20,DKShare,0.257
-rodot_plus,10,20,Enc,0.073
-rodot_plus,10,20,DKCom,0.002
-rodot_plus,10,20,ParDec,0.103
-rodot_plus,10,20,ComDec,0.041
-rodot_plus,10,20,Total pipeline,40.78
-rodot_plus,10,30,Setup,42.146
-rodot_plus,10,30,KGen,0.002
+rodot_plus,10,20,Enc,0.072
+rodot_plus,10,20,DKCom,0.001
+rodot_plus,10,20,ParDec,0.102
+rodot_plus,10,20,ComDec,0.042
+rodot_plus,10,20,Total pipeline,41.694
+rodot_plus,10,30,Setup,40.417
+rodot_plus,10,30,KGen,0.001
 rodot_plus,10,30,DKShare,0.257
 rodot_plus,10,30,Enc,0.072
 rodot_plus,10,30,DKCom,0.002
-rodot_plus,10,30,ParDec,0.11
-rodot_plus,10,30,ComDec,0.047
-rodot_plus,10,30,Total pipeline,42.636
-rodot_plus,10,40,Setup,41.448
-rodot_plus,10,40,KGen,0.002
-rodot_plus,10,40,DKShare,0.256
+rodot_plus,10,30,ParDec,0.109
+rodot_plus,10,30,ComDec,0.045
+rodot_plus,10,30,Total pipeline,40.904
+rodot_plus,10,40,Setup,42.952
+rodot_plus,10,40,KGen,0.001
+rodot_plus,10,40,DKShare,0.258
 rodot_plus,10,40,Enc,0.072
 rodot_plus,10,40,DKCom,0.003
-rodot_plus,10,40,ParDec,0.118
-rodot_plus,10,40,ComDec,0.049
-rodot_plus,10,40,Total pipeline,41.947
-rodot_plus,10,50,Setup,41.006
-rodot_plus,10,50,KGen,0.002
-rodot_plus,10,50,DKShare,0.258
+rodot_plus,10,40,ParDec,0.117
+rodot_plus,10,40,ComDec,0.047
+rodot_plus,10,40,Total pipeline,43.451
+rodot_plus,10,50,Setup,41.734
+rodot_plus,10,50,KGen,0.001
+rodot_plus,10,50,DKShare,0.256
 rodot_plus,10,50,Enc,0.072
 rodot_plus,10,50,DKCom,0.004
-rodot_plus,10,50,ParDec,0.126
-rodot_plus,10,50,ComDec,0.052
-rodot_plus,10,50,Total pipeline,41.519
-rodot_plus,20,10,Setup,42.551
+rodot_plus,10,50,ParDec,0.124
+rodot_plus,10,50,ComDec,0.051
+rodot_plus,10,50,Total pipeline,42.242
+rodot_plus,20,10,Setup,40.5
 rodot_plus,20,10,KGen,0.002
 rodot_plus,20,10,DKShare,0.257
-rodot_plus,20,10,Enc,0.073
+rodot_plus,20,10,Enc,0.077
 rodot_plus,20,10,DKCom,0.001
-rodot_plus,20,10,ParDec,0.093
-rodot_plus,20,10,ComDec,0.036
-rodot_plus,20,10,Total pipeline,43.013
-rodot_plus,20,20,Setup,42.896
-rodot_plus,20,20,KGen,0.002
-rodot_plus,20,20,DKShare,0.255
-rodot_plus,20,20,Enc,0.072
+rodot_plus,20,10,ParDec,0.097
+rodot_plus,20,10,ComDec,0.037
+rodot_plus,20,10,Total pipeline,40.971
+rodot_plus,20,20,Setup,42.791
+rodot_plus,20,20,KGen,0.001
+rodot_plus,20,20,DKShare,0.264
+rodot_plus,20,20,Enc,0.074
 rodot_plus,20,20,DKCom,0.001
-rodot_plus,20,20,ParDec,0.099
-rodot_plus,20,20,ComDec,0.041
-rodot_plus,20,20,Total pipeline,43.366
-rodot_plus,20,30,Setup,41.452
-rodot_plus,20,30,KGen,0.002
-rodot_plus,20,30,DKShare,0.257
-rodot_plus,20,30,Enc,0.071
+rodot_plus,20,20,ParDec,0.102
+rodot_plus,20,20,ComDec,0.04
+rodot_plus,20,20,Total pipeline,43.275
+rodot_plus,20,30,Setup,43.279
+rodot_plus,20,30,KGen,0.001
+rodot_plus,20,30,DKShare,0.27
+rodot_plus,20,30,Enc,0.075
 rodot_plus,20,30,DKCom,0.002
-rodot_plus,20,30,ParDec,0.108
-rodot_plus,20,30,ComDec,0.044
-rodot_plus,20,30,Total pipeline,41.936
-rodot_plus,20,40,Setup,41.318
-rodot_plus,20,40,KGen,0.002
-rodot_plus,20,40,DKShare,0.256
-rodot_plus,20,40,Enc,0.072
+rodot_plus,20,30,ParDec,0.113
+rodot_plus,20,30,ComDec,0.046
+rodot_plus,20,30,Total pipeline,43.787
+rodot_plus,20,40,Setup,43.617
+rodot_plus,20,40,KGen,0.001
+rodot_plus,20,40,DKShare,0.266
+rodot_plus,20,40,Enc,0.074
 rodot_plus,20,40,DKCom,0.003
-rodot_plus,20,40,ParDec,0.114
-rodot_plus,20,40,ComDec,0.046
-rodot_plus,20,40,Total pipeline,41.811
-rodot_plus,20,50,Setup,41.273
+rodot_plus,20,40,ParDec,0.119
+rodot_plus,20,40,ComDec,0.047
+rodot_plus,20,40,Total pipeline,44.127
+rodot_plus,20,50,Setup,42.761
 rodot_plus,20,50,KGen,0.002
-rodot_plus,20,50,DKShare,0.255
-rodot_plus,20,50,Enc,0.071
-rodot_plus,20,50,DKCom,0.003
-rodot_plus,20,50,ParDec,0.12
-rodot_plus,20,50,ComDec,0.051
-rodot_plus,20,50,Total pipeline,41.774
-rodot_plus,30,10,Setup,37.776
+rodot_plus,20,50,DKShare,0.267
+rodot_plus,20,50,Enc,0.074
+rodot_plus,20,50,DKCom,0.004
+rodot_plus,20,50,ParDec,0.124
+rodot_plus,20,50,ComDec,0.052
+rodot_plus,20,50,Total pipeline,43.283
+rodot_plus,30,10,Setup,40.648
 rodot_plus,30,10,KGen,0.002
-rodot_plus,30,10,DKShare,0.254
-rodot_plus,30,10,Enc,0.072
+rodot_plus,30,10,DKShare,0.259
+rodot_plus,30,10,Enc,0.073
 rodot_plus,30,10,DKCom,0.001
-rodot_plus,30,10,ParDec,0.09
-rodot_plus,30,10,ComDec,0.036
-rodot_plus,30,10,Total pipeline,38.23
-rodot_plus,30,20,Setup,37.544
+rodot_plus,30,10,ParDec,0.092
+rodot_plus,30,10,ComDec,0.037
+rodot_plus,30,10,Total pipeline,41.112
+rodot_plus,30,20,Setup,41.699
 rodot_plus,30,20,KGen,0.001
-rodot_plus,30,20,DKShare,0.253
+rodot_plus,30,20,DKShare,0.256
 rodot_plus,30,20,Enc,0.071
 rodot_plus,30,20,DKCom,0.001
 rodot_plus,30,20,ParDec,0.097
 rodot_plus,30,20,ComDec,0.039
-rodot_plus,30,20,Total pipeline,38.007
-rodot_plus,30,30,Setup,43.414
-rodot_plus,30,30,KGen,0.002
-rodot_plus,30,30,DKShare,0.258
+rodot_plus,30,20,Total pipeline,42.165
+rodot_plus,30,30,Setup,39.859
+rodot_plus,30,30,KGen,0.001
+rodot_plus,30,30,DKShare,0.257
 rodot_plus,30,30,Enc,0.072
 rodot_plus,30,30,DKCom,0.002
-rodot_plus,30,30,ParDec,0.106
-rodot_plus,30,30,ComDec,0.044
-rodot_plus,30,30,Total pipeline,43.899
-rodot_plus,30,40,Setup,41.328
-rodot_plus,30,40,KGen,0.002
-rodot_plus,30,40,DKShare,0.261
-rodot_plus,30,40,Enc,0.073
+rodot_plus,30,30,ParDec,0.105
+rodot_plus,30,30,ComDec,0.043
+rodot_plus,30,30,Total pipeline,40.339
+rodot_plus,30,40,Setup,39.11
+rodot_plus,30,40,KGen,0.001
+rodot_plus,30,40,DKShare,0.256
+rodot_plus,30,40,Enc,0.071
 rodot_plus,30,40,DKCom,0.003
-rodot_plus,30,40,ParDec,0.113
-rodot_plus,30,40,ComDec,0.047
-rodot_plus,30,40,Total pipeline,41.826
-rodot_plus,30,50,Setup,42.125
+rodot_plus,30,40,ParDec,0.111
+rodot_plus,30,40,ComDec,0.044
+rodot_plus,30,40,Total pipeline,39.596
+rodot_plus,30,50,Setup,43.083
 rodot_plus,30,50,KGen,0.002
-rodot_plus,30,50,DKShare,0.257
+rodot_plus,30,50,DKShare,0.256
 rodot_plus,30,50,Enc,0.071
 rodot_plus,30,50,DKCom,0.003
-rodot_plus,30,50,ParDec,0.118
+rodot_plus,30,50,ParDec,0.116
 rodot_plus,30,50,ComDec,0.049
-rodot_plus,30,50,Total pipeline,42.625
+rodot_plus,30,50,Total pipeline,43.58

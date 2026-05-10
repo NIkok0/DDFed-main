@@ -1,41 +1,41 @@
 scheme,drop_rate,clients,stage,time_ms
-rodot_plus,10,10,Setup,40.689
+rodot_plus,10,10,Setup,41.977
 rodot_plus,10,10,KGen,0.002
-rodot_plus,10,10,DKShare,0.255
-rodot_plus,10,10,Enc,0.072
+rodot_plus,10,10,DKShare,0.257
+rodot_plus,10,10,Enc,0.073
 rodot_plus,10,10,DKCom,0.001
-rodot_plus,10,10,ParDec,0.092
+rodot_plus,10,10,ParDec,0.093
 rodot_plus,10,10,ComDec,0.037
-rodot_plus,10,10,Total pipeline,41.147
-rodot_plus,10,20,Setup,40.304
-rodot_plus,10,20,KGen,0.002
+rodot_plus,10,10,Total pipeline,42.441
+rodot_plus,10,20,Setup,41.219
+rodot_plus,10,20,KGen,0.001
 rodot_plus,10,20,DKShare,0.257
-rodot_plus,10,20,Enc,0.073
-rodot_plus,10,20,DKCom,0.002
-rodot_plus,10,20,ParDec,0.103
-rodot_plus,10,20,ComDec,0.041
-rodot_plus,10,20,Total pipeline,40.78
-rodot_plus,10,30,Setup,42.146
-rodot_plus,10,30,KGen,0.002
+rodot_plus,10,20,Enc,0.072
+rodot_plus,10,20,DKCom,0.001
+rodot_plus,10,20,ParDec,0.102
+rodot_plus,10,20,ComDec,0.042
+rodot_plus,10,20,Total pipeline,41.694
+rodot_plus,10,30,Setup,40.417
+rodot_plus,10,30,KGen,0.001
 rodot_plus,10,30,DKShare,0.257
 rodot_plus,10,30,Enc,0.072
 rodot_plus,10,30,DKCom,0.002
-rodot_plus,10,30,ParDec,0.11
-rodot_plus,10,30,ComDec,0.047
-rodot_plus,10,30,Total pipeline,42.636
-rodot_plus,10,40,Setup,41.448
-rodot_plus,10,40,KGen,0.002
-rodot_plus,10,40,DKShare,0.256
+rodot_plus,10,30,ParDec,0.109
+rodot_plus,10,30,ComDec,0.045
+rodot_plus,10,30,Total pipeline,40.904
+rodot_plus,10,40,Setup,42.952
+rodot_plus,10,40,KGen,0.001
+rodot_plus,10,40,DKShare,0.258
 rodot_plus,10,40,Enc,0.072
 rodot_plus,10,40,DKCom,0.003
-rodot_plus,10,40,ParDec,0.118
-rodot_plus,10,40,ComDec,0.049
-rodot_plus,10,40,Total pipeline,41.947
-rodot_plus,10,50,Setup,41.006
-rodot_plus,10,50,KGen,0.002
-rodot_plus,10,50,DKShare,0.258
+rodot_plus,10,40,ParDec,0.117
+rodot_plus,10,40,ComDec,0.047
+rodot_plus,10,40,Total pipeline,43.451
+rodot_plus,10,50,Setup,41.734
+rodot_plus,10,50,KGen,0.001
+rodot_plus,10,50,DKShare,0.256
 rodot_plus,10,50,Enc,0.072
 rodot_plus,10,50,DKCom,0.004
-rodot_plus,10,50,ParDec,0.126
-rodot_plus,10,50,ComDec,0.052
-rodot_plus,10,50,Total pipeline,41.519
+rodot_plus,10,50,ParDec,0.124
+rodot_plus,10,50,ComDec,0.051
+rodot_plus,10,50,Total pipeline,42.242
