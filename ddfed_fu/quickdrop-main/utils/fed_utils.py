@@ -6,7 +6,7 @@ import numpy as np
 import pandas
 from torch.utils.data import Dataset
 from torchvision import datasets, transforms
-from scipy.ndimage.interpolation import rotate as scipyrotate
+from scipy.ndimage import rotate as scipyrotate
 from tqdm import tqdm
 from utils.networks import *
 

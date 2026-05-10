@@ -1,7 +1,7 @@
 import sys
 import argparse
 
-from torch.fft import Tensor
+from torch import Tensor
 
 sys.path.append('../*')
 
