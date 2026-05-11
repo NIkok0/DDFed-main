@@ -13,9 +13,9 @@
 
 首次拉取项目后，建议先完成下面 4 步，再运行后续实验命令。
 
-### 0.1 创建并激活 Python 环境（Bash / Linux / macOS）
+### 0.1 创建并激活 Python 环境（Windows PowerShell）
 
-```bash
+```powershell
 conda create -n myenv python=3.10 -y
 conda activate myenv
 ```
@@ -24,20 +24,20 @@ conda activate myenv
 
 推荐一键安装：
 
-```bash
+```powershell
 pip install -r requirements.txt
 ```
 
 如果你需要固定 GPU 版 PyTorch（而不是默认源解析），可改为：
 
-```bash
+```powershell
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 pip install -r requirements.txt
 ```
 
 ### 0.3 验证 GPU 可用
 
-```bash
+```powershell
 python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')"
 ```
 
@@ -168,7 +168,7 @@ DDFed 额外参数：
 
 ## 5）实验执行命令
 
-建议在 `/home/hyr/miaoli/DDFed-main/ddfed_fl` 目录下执行（使用 `-m FedAvg.server...` 时更稳妥）。
+建议在 `E:\code\my-test\DDFed-main\ddfed_fl` 目录下执行（使用 `-m FedAvg.server...` 时更稳妥）。
 
 统一对照参数（除方法与入口外保持一致）：
 
@@ -194,15 +194,16 @@ Lepcat 入口补充说明：
 - `--pack_sizes` 用于一次运行多个 `secure_pack_size`；若不设置则使用单个 `--secure_pack_size`。
 
 ### 5.1 运行 FedAvg baseline
-```bash
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_baseline \
-  --device cuda:0 \
-  --env_path "./env" \
-  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 \
-  --num_rounds 5 \
-  --local_epochs 1 \
-  --batch_size 64 \
-  --participation_rate 0.2 \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_baseline `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --participation_rate 0.2 `
   --seed 0
 ```
 
@@ -210,46 +211,48 @@ KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_baseline \
 
 ### 5.2 运行 FedAvg + TMCFE
 
-```bash
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_tmcfe \
-  --method fedavg_tmcfe \
-  --device cuda:0 \
-  --env_path "./env" \
-  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 \
-  --num_rounds 5 \
-  --local_epochs 1 \
-  --batch_size 64 \
-  --participation_rate 0.2 \
-  --threshold 5 \
-  --num_decryptors 10 \
-  --ddfed_project_root "../../DDFed-main" \
-  --quantization_scale 100000 \
-  --secure_pack_size 8 \
-  --packing_value_bits 32 \
-  --skip_zero_blocks true \
-  --setup_once true \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_tmcfe `
+  --method fedavg_tmcfe `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --participation_rate 0.2 `
+  --threshold 5 `
+  --num_decryptors 10 `
+  --ddfed_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
+  --skip_zero_blocks true `
+  --setup_once true `
   --seed 0
 ```
 
 ### 5.2b 运行 FedAvg + DDFed（Rodot+）
 
-```bash
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_ddfed \
-  --method fedavg_ddfed \
-  --device cuda:0 \
-  --env_path "./env" \
-  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 \
-  --num_rounds 5 \
-  --local_epochs 1 \
-  --batch_size 64 \
-  --participation_rate 0.2 \
-  --threshold 5 \
-  --num_decryptors 10 \
-  --ddfed_project_root "../../DDFed-main" \
-  --quantization_scale 100000 \
-  --secure_pack_size 8 \
-  --packing_value_bits 32 \
-  --skip_zero_blocks true \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_ddfed `
+  --method fedavg_ddfed `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --participation_rate 0.2 `
+  --threshold 5 `
+  --num_decryptors 10 `
+  --ddfed_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
+  --skip_zero_blocks true `
   --seed 0
 ```
 
@@ -257,91 +260,95 @@ KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_ddfed \
 
 单次运行（`active_client_count=10, secure_pack_size=1`）：
 
-```bash
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_lepcat \
-  --method fedavg_lepcat \
-  --device cuda:0 \
-  --env_path "./env" \
-  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 \
-  --num_rounds 5 \
-  --local_epochs 1 \
-  --batch_size 64 \
-  --active_client_count 10 \
-  --threshold 5 \
-  --seed 0 \
-  --lepcat_project_root "../../DDFed-main" \
-  --quantization_scale 100000 \
-  --secure_pack_size 1 \
-  --packing_value_bits 32 \
-  --save_results true \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_lepcat `
+  --method fedavg_lepcat `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --active_client_count 10 `
+  --threshold 5 `
+  --seed 0 `
+  --lepcat_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 1 `
+  --packing_value_bits 32 `
+  --save_results true `
   --save_figures true
 ```
 
 单次运行（`active_client_count=10, secure_pack_size=8`）：
 
-```bash
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_lepcat \
-  --method fedavg_lepcat \
-  --device cuda:0 \
-  --env_path "./env" \
-  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 \
-  --num_rounds 5 \
-  --local_epochs 1 \
-  --batch_size 64 \
-  --active_client_count 10 \
-  --threshold 5 \
-  --seed 0 \
-  --lepcat_project_root "../../DDFed-main" \
-  --quantization_scale 100000 \
-  --secure_pack_size 8 \
-  --packing_value_bits 32 \
-  --save_results true \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_lepcat `
+  --method fedavg_lepcat `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --active_client_count 10 `
+  --threshold 5 `
+  --seed 0 `
+  --lepcat_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
+  --save_results true `
   --save_figures true
 ```
 
 参与者数量扩展实验（单 pack size）：
 
-```bash
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_lepcat \
-  --method fedavg_lepcat \
-  --experiment participant_scalability \
-  --device cuda:0 \
-  --env_path "./env" \
-  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 \
-  --num_rounds 5 \
-  --local_epochs 1 \
-  --batch_size 64 \
-  --participant_counts 5,10,20 \
-  --threshold 5 \
-  --seed 0 \
-  --lepcat_project_root "../../DDFed-main" \
-  --quantization_scale 100000 \
-  --secure_pack_size 8 \
-  --packing_value_bits 32 \
-  --save_results true \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_lepcat `
+  --method fedavg_lepcat `
+  --experiment participant_scalability `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --participant_counts 5,10,20 `
+  --threshold 5 `
+  --seed 0 `
+  --lepcat_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
+  --save_results true `
   --save_figures true
 ```
 
 参与者数量扩展实验（多 pack size）：
 
-```bash
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_lepcat \
-  --method fedavg_lepcat \
-  --experiment participant_scalability \
-  --device cuda:0 \
-  --env_path "./env" \
-  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 \
-  --num_rounds 5 \
-  --local_epochs 1 \
-  --batch_size 64 \
-  --participant_counts 5,10,20 \
-  --pack_sizes 1,4,8,16 \
-  --threshold 5 \
-  --seed 0 \
-  --lepcat_project_root "../../DDFed-main" \
-  --quantization_scale 100000 \
-  --packing_value_bits 32 \
-  --save_results true \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_lepcat `
+  --method fedavg_lepcat `
+  --experiment participant_scalability `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --participant_counts 5,10,20 `
+  --pack_sizes 1,4,8,16 `
+  --threshold 5 `
+  --seed 0 `
+  --lepcat_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --packing_value_bits 32 `
+  --save_results true `
   --save_figures true
 ```
 
@@ -349,50 +356,52 @@ KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_lepcat \
 
 FedAvg + TMCFE：
 
-```bash
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_tmcfe \
-  --method fedavg_tmcfe \
-  --device cuda:0 \
-  --env_path "./env" \
-  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 \
-  --num_rounds 5 \
-  --local_epochs 1 \
-  --batch_size 64 \
-  --participation_rate 0.2 \
-  --threshold 5 \
-  --num_decryptors 10 \
-  --ddfed_project_root "../../DDFed-main" \
-  --quantization_scale 100000 \
-  --secure_pack_size 8 \
-  --packing_value_bits 32 \
-  --skip_zero_blocks true \
-  --setup_once true \
-  --seed 0 \
-  --simulate_client_dropout true \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_tmcfe `
+  --method fedavg_tmcfe `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --participation_rate 0.2 `
+  --threshold 5 `
+  --num_decryptors 10 `
+  --ddfed_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
+  --skip_zero_blocks true `
+  --setup_once true `
+  --seed 0 `
+  --simulate_client_dropout true `
   --client_dropout_rate 0.2
 ```
 
 FedAvg + DDFed（Rodot+）：
 
-```bash
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_ddfed \
-  --method fedavg_ddfed \
-  --device cuda:0 \
-  --env_path "./env" \
-  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 \
-  --num_rounds 5 \
-  --local_epochs 1 \
-  --batch_size 64 \
-  --participation_rate 0.2 \
-  --threshold 5 \
-  --num_decryptors 10 \
-  --ddfed_project_root "../../DDFed-main" \
-  --quantization_scale 100000 \
-  --secure_pack_size 8 \
-  --packing_value_bits 32 \
-  --skip_zero_blocks true \
-  --simulate_client_dropout true \
-  --client_dropout_rate 0.2 \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_ddfed `
+  --method fedavg_ddfed `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --participation_rate 0.2 `
+  --threshold 5 `
+  --num_decryptors 10 `
+  --ddfed_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
+  --skip_zero_blocks true `
+  --simulate_client_dropout true `
+  --client_dropout_rate 0.2 `
   --seed 0
 ```
 
@@ -400,50 +409,52 @@ KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_ddfed \
 
 FedAvg + TMCFE：
 
-```bash
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_tmcfe \
-  --method fedavg_tmcfe \
-  --device cuda:0 \
-  --env_path "./env" \
-  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 \
-  --num_rounds 5 \
-  --local_epochs 1 \
-  --batch_size 64 \
-  --participation_rate 0.2 \
-  --threshold 5 \
-  --num_decryptors 10 \
-  --ddfed_project_root "../../DDFed-main" \
-  --quantization_scale 100000 \
-  --secure_pack_size 8 \
-  --packing_value_bits 32 \
-  --skip_zero_blocks true \
-  --setup_once true \
-  --seed 0 \
-  --simulate_decryptor_dropout true \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_tmcfe `
+  --method fedavg_tmcfe `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --participation_rate 0.2 `
+  --threshold 5 `
+  --num_decryptors 10 `
+  --ddfed_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
+  --skip_zero_blocks true `
+  --setup_once true `
+  --seed 0 `
+  --simulate_decryptor_dropout true `
   --decryptor_dropout_rate 0.3
 ```
 
 FedAvg + DDFed（Rodot+）：
 
-```bash
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_ddfed \
-  --method fedavg_ddfed \
-  --device cuda:0 \
-  --env_path "./env" \
-  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 \
-  --num_rounds 5 \
-  --local_epochs 1 \
-  --batch_size 64 \
-  --participation_rate 0.2 \
-  --threshold 5 \
-  --num_decryptors 10 \
-  --ddfed_project_root "../../DDFed-main" \
-  --quantization_scale 100000 \
-  --secure_pack_size 8 \
-  --packing_value_bits 32 \
-  --skip_zero_blocks true \
-  --simulate_decryptor_dropout true \
-  --decryptor_dropout_rate 0.3 \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_ddfed `
+  --method fedavg_ddfed `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --participation_rate 0.2 `
+  --threshold 5 `
+  --num_decryptors 10 `
+  --ddfed_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
+  --skip_zero_blocks true `
+  --simulate_decryptor_dropout true `
+  --decryptor_dropout_rate 0.3 `
   --seed 0
 ```
 
@@ -451,56 +462,58 @@ KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_ddfed \
 
 FedAvg + TMCFE：
 
-```bash
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_tmcfe \
-  --method fedavg_tmcfe \
-  --device cuda:0 \
-  --env_path "./env" \
-  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 \
-  --num_rounds 5 \
-  --local_epochs 1 \
-  --batch_size 64 \
-  --participation_rate 0.2 \
-  --threshold 5 \
-  --num_decryptors 10 \
-  --ddfed_project_root "../../DDFed-main" \
-  --quantization_scale 100000 \
-  --secure_pack_size 8 \
-  --packing_value_bits 32 \
-  --skip_zero_blocks true \
-  --setup_once true \
-  --seed 0 \
-  --simulate_replay_attack true \
-  --replay_attack_type client_ciphertext \
-  --replay_ratio 0.2 \
-  --replay_source_round 1 \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_tmcfe `
+  --method fedavg_tmcfe `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --participation_rate 0.2 `
+  --threshold 5 `
+  --num_decryptors 10 `
+  --ddfed_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
+  --skip_zero_blocks true `
+  --setup_once true `
+  --seed 0 `
+  --simulate_replay_attack true `
+  --replay_attack_type client_ciphertext `
+  --replay_ratio 0.2 `
+  --replay_source_round 1 `
   --replay_target_round 2
 ```
 
 FedAvg + DDFed（Rodot+）：
 
-```bash
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_ddfed \
-  --method fedavg_ddfed \
-  --device cuda:0 \
-  --env_path "./env" \
-  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 \
-  --num_rounds 5 \
-  --local_epochs 1 \
-  --batch_size 64 \
-  --participation_rate 0.2 \
-  --threshold 5 \
-  --num_decryptors 10 \
-  --ddfed_project_root "../../DDFed-main" \
-  --quantization_scale 100000 \
-  --secure_pack_size 8 \
-  --packing_value_bits 32 \
-  --skip_zero_blocks true \
-  --simulate_replay_attack true \
-  --replay_attack_type client_ciphertext \
-  --replay_ratio 0.2 \
-  --replay_source_round 1 \
-  --replay_target_round 2 \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_ddfed `
+  --method fedavg_ddfed `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env affine-fashionmnist-seed42-u20-alpha0.1-0.01 `
+  --num_rounds 5 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --participation_rate 0.2 `
+  --threshold 5 `
+  --num_decryptors 10 `
+  --ddfed_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
+  --skip_zero_blocks true `
+  --simulate_replay_attack true `
+  --replay_attack_type client_ciphertext `
+  --replay_ratio 0.2 `
+  --replay_source_round 1 `
+  --replay_target_round 2 `
   --seed 0
 ```
 
@@ -512,34 +525,36 @@ KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_ddfed \
 
 FedAvg + TMCFE：
 
-```bash
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_tmcfe \
-  --method fedavg_tmcfe \
-  --device cpu \
-  --run_sanity_check \
-  --sanity_check_only \
-  --quantization_scale 100000 \
-  --secure_pack_size 8 \
-  --packing_value_bits 32 \
-  --skip_zero_blocks true \
-  --num_decryptors 3 \
-  --threshold 2 \
-  --setup_once true \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_tmcfe `
+  --method fedavg_tmcfe `
+  --device cpu `
+  --run_sanity_check `
+  --sanity_check_only `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
+  --skip_zero_blocks true `
+  --num_decryptors 3 `
+  --threshold 2 `
+  --setup_once true `
   --seed 0
 ```
 
 FedAvg + DDFed（Rodot+）：
 
-```bash
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_ddfed \
-  --method sanity_packing \
-  --device cpu \
-  --seed 0 \
-  --num_decryptors 3 \
-  --threshold 2 \
-  --quantization_scale 100000 \
-  --secure_pack_size 8 \
-  --packing_value_bits 32 \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_ddfed `
+  --method sanity_packing `
+  --device cpu `
+  --seed 0 `
+  --num_decryptors 3 `
+  --threshold 2 `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
   --ddfed_project_root "../../DDFed-main"
 ```
 
@@ -549,18 +564,19 @@ KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_ddfed \
 
 FedAvg + Lepcat（DMCFE-IP）：
 
-```bash
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_lepcat \
-  --method sanity_lepcat \
-  --threshold 2 \
-  --seed 0 \
-  --lepcat_project_root "../../DDFed-main" \
-  --quantization_scale 100000 \
-  --secure_pack_size 8 \
-  --packing_value_bits 32 \
-  --active_client_count 5 \
-  --participant_counts 5,10,20 \
-  --pack_sizes 1,8 \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_lepcat `
+  --method sanity_lepcat `
+  --threshold 2 `
+  --seed 0 `
+  --lepcat_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
+  --active_client_count 5 `
+  --participant_counts 5,10,20 `
+  --pack_sizes 1,8 `
   --save_results true
 ```
 
@@ -615,25 +631,26 @@ KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_lepcat \
 
 示例（DDFed，pack=8，数据集可变）：
 
-```bash
-DATASET="cifar10"  # 可改为: fashionmnist / cifar10
-U=10
-KMP_DUPLICATE_LIB_OK=TRUE python -m FedAvg.server.train_fedavg_ddfed \
-  --method fedavg_ddfed \
-  --device cuda:0 \
-  --env_path "./env" \
-  --env "affine-${DATASET}-seed42-u${U}-alpha0.1-0.01" \
-  --num_rounds 1 \
-  --local_epochs 1 \
-  --batch_size 64 \
-  --participation_rate 0.2 \
-  --threshold 2 \
-  --num_decryptors 3 \
-  --ddfed_project_root "../../DDFed-main" \
-  --quantization_scale 100000 \
-  --secure_pack_size 8 \
-  --packing_value_bits 32 \
-  --skip_zero_blocks true \
+```powershell
+$env:KMP_DUPLICATE_LIB_OK='TRUE'
+$DATASET = "cifar10"  # 可改为: fashionmnist / cifar10
+$U = 10
+& "E:\Conda\envs\myenv\python.exe" -m FedAvg.server.train_fedavg_ddfed `
+  --method fedavg_ddfed `
+  --device cuda:0 `
+  --env_path "./env" `
+  --env "affine-$DATASET-seed42-u$U-alpha0.1-0.01" `
+  --num_rounds 1 `
+  --local_epochs 1 `
+  --batch_size 64 `
+  --participation_rate 0.2 `
+  --threshold 2 `
+  --num_decryptors 3 `
+  --ddfed_project_root "../../DDFed-main" `
+  --quantization_scale 100000 `
+  --secure_pack_size 8 `
+  --packing_value_bits 32 `
+  --skip_zero_blocks true `
   --seed 0
 ```
 

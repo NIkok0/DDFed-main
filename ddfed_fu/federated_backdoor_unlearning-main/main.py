@@ -1,10 +1,12 @@
 import logging
+import sys
+from pathlib import Path
+
 from tqdm import tqdm
 
 import torch
 from torch.utils.data import DataLoader
 
-import config
 import unlearning
 import utils
 import neurotoxin
@@ -13,21 +15,28 @@ from argument_parser import get_args
 from data_loader import get_dataset, get_poison_data, get_num_classes
 from vgg_model import VGG
 
+# Add parent directory (ddfed_fu) to sys.path so that the common module is importable
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from common import BackdoorUnlearnConfig
 
-def main(args):
+
+def main(args, cfg: BackdoorUnlearnConfig):
     """
         Main function to run the federated learning pipeline. It handles the entire learning process,
         including the poisoning and unlearning phases, based on the arguments provided.
 
         Args:
             args: Parsed command line arguments containing configurations for the training process.
+            cfg:  Unified BackdoorUnlearnConfig object holding all runtime parameters.
     """
     if args.n_clients is not None:
         if args.n_clients <= 0:
             raise ValueError("--n_clients must be a positive integer.")
-        if args.n_clients > config.num_clients:
-            raise ValueError(f"--n_clients ({args.n_clients}) cannot exceed total clients ({config.num_clients}).")
-        config.num_selected = args.n_clients
+        if args.n_clients > cfg.num_clients:
+            raise ValueError(
+                f"--n_clients ({args.n_clients}) cannot exceed total clients ({cfg.num_clients})."
+            )
+        cfg.n_clients = args.n_clients  # also updates cfg.num_selected via aliases
 
     # Determine device to use (GPU if available, else CPU)
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -41,22 +50,28 @@ def main(args):
             append = f"_backdoor_{args.poison_strategy}"
 
     # Configure logging
-    logging.basicConfig(filename=f'round_history{append}.log', level=logging.INFO, format='%(message)s')
+    logging.basicConfig(
+        filename=f'round_history{append}.log', level=logging.INFO, format='%(message)s'
+    )
 
     # Load dataset
-    config.num_classes = get_num_classes(args.data_name)
+    cfg.num_classes = get_num_classes(args.data_name)
     train_splits, testdata = get_dataset(args.data_name)
-    train_loader = [DataLoader(x, batch_size=config.batch_size, shuffle=False) for x in train_splits]
-    test_loader = DataLoader(testdata, batch_size=config.batch_size, shuffle=False)
+    train_loader = [DataLoader(x, batch_size=cfg.batch_size, shuffle=False) for x in train_splits]
+    test_loader = DataLoader(testdata, batch_size=cfg.batch_size, shuffle=False)
 
     # If poisoning is enabled, load poisoned data
     if args.poison:
-        benign_loader, mixed_loader, poison_train_loader, poison_test_loader = get_poison_data(train_splits, testdata)
+        benign_loader, mixed_loader, poison_train_loader, poison_test_loader = get_poison_data(
+            train_splits, testdata
+        )
 
     # Initialize the global model and client models
-    global_model = VGG('VGG16', num_classes=config.num_classes, channels=3).to(device)
-    client_models = [VGG('VGG16', num_classes=config.num_classes, channels=3).to(device)
-                     for _ in range(config.num_selected)]
+    global_model = VGG('VGG16', num_classes=cfg.num_classes, channels=3).to(device)
+    client_models = [
+        VGG('VGG16', num_classes=cfg.num_classes, channels=3).to(device)
+        for _ in range(cfg.num_selected)
+    ]
 
     # Initialize counters and flags for backdoor and unlearn processes
     backdoor_count, unlearn_count = 0, 0
@@ -87,9 +102,10 @@ def main(args):
             print('Selected Clients for Update: ' + str(client_idx))
 
             # Perform client update for selected clients
-            for i in tqdm(range(config.num_selected)):
+            for i in tqdm(range(cfg.num_selected)):
                 utils.client_update(
-                    client_models[i], train_loader[client_idx[i]], client_idx[i], test_loader, device
+                    client_models[i], train_loader[client_idx[i]], client_idx[i],
+                    test_loader, device
                 )
 
         # Federated Learning - Backdoor (Poisoning) Phase
@@ -100,16 +116,18 @@ def main(args):
             print('Selected Clients for Update: ' + str(client_idx))
 
             # Perform normal update for non-attacker clients, and poison update for attacker client
-            for i in tqdm(range(config.num_selected)):
-                if client_idx[i] != config.attacker_id:
+            for i in tqdm(range(cfg.num_selected)):
+                if client_idx[i] != cfg.attacker_id:
                     # Normal client update
                     utils.client_update(
-                        client_models[i], train_loader[client_idx[i]], client_idx[i], test_loader, device
+                        client_models[i], train_loader[client_idx[i]], client_idx[i],
+                        test_loader, device
                     )
                 else:
                     # Attacker client update
                     neurotoxin.poison(
-                        client_models[i], benign_loader, mixed_loader, client_idx[i], test_loader, poison_test_loader, device
+                        client_models[i], benign_loader, mixed_loader, client_idx[i],
+                        test_loader, poison_test_loader, device
                     )
                     backdoor_count += 1
                     # Check if backdoor phase is completed
@@ -125,16 +143,19 @@ def main(args):
             print('Selected Clients for Update: ' + str(client_idx))
 
             # Perform normal update for non-attacker clients, and unlearn update for attacker clients
-            for i in tqdm(range(config.num_selected)):
-                if client_idx[i] != config.attacker_id:
+            for i in tqdm(range(cfg.num_selected)):
+                if client_idx[i] != cfg.attacker_id:
                     # Normal client update
                     utils.client_update(
-                        client_models[i], train_loader[client_idx[i]], client_idx[i], test_loader, device
+                        client_models[i], train_loader[client_idx[i]], client_idx[i],
+                        test_loader, device
                     )
                 else:
                     # Perform unlearning on the attacker client
                     unlearning.unlearn(
-                        client_models[i], train_loader[client_idx[i]], client_idx[i], test_loader, poison_train_loader, poison_test_loader, unlearn_count, device
+                        client_models[i], train_loader[client_idx[i]], client_idx[i],
+                        test_loader, poison_train_loader, poison_test_loader,
+                        unlearn_count, device
                     )
                     unlearn_count += 1
 
@@ -157,4 +178,14 @@ if __name__ == '__main__':
         Entry point of the program. It parses the command-line arguments and initiates the main training process.
     """
     arguments = get_args()
-    main(arguments)
+    cfg = BackdoorUnlearnConfig(
+        data_name=arguments.data_name,
+        n_clients=arguments.n_clients if arguments.n_clients is not None else 10,
+        poison=arguments.poison,
+        unlearn=arguments.unlearn,
+        poison_strategy=arguments.poison_strategy,
+        poison_start_round=arguments.poison_start_round,
+        poison_duration=arguments.poison_duration,
+        unlearn_duration=arguments.unlearn_duration,
+    )
+    main(arguments, cfg)
