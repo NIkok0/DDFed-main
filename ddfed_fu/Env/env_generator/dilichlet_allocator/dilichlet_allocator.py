@@ -1,13 +1,14 @@
 import sys
 import argparse
+import os
 
-from torch.fft import Tensor
-
-sys.path.append('../*')
+# 将 quickdrop-main 根目录加入 Python 搜索路径
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from env_generator.preprocessing.baselines_dataloader import *
 from env_generator.utils import *
 from utils.fed_utils import *
+from torch import Tensor
 
 FIXED_PREFIX = 'dilichlet'
 FIXED_SAVING_FORMAT = '{}-seed{}-u{}-alpha{}'  # dataset name - seed - num_client - alpha
