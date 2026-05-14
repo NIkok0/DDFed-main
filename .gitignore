@@ -21,8 +21,6 @@ results/
 **/data/
 **/results/
 
-# 允许版本化 ddfed_fl 下的数据集与联邦划分（仍忽略其它路径的 env/、data/）
+# 允许版本化 ddfed_fl 下的联邦划分环境（仍忽略其它路径的 env/）
 !ddfed_fl/env/
 !ddfed_fl/env/**
-!ddfed_fl/data/
-!ddfed_fl/data/**
