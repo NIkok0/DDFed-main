@@ -115,7 +115,7 @@ def parse_args():
     )
     parser.add_argument("--data_path", type=str, default="../../data")
     parser.add_argument("--dataset", type=str, default="MNIST")
-    parser.add_argument("--strategy", type=str, default="quickdrop-affine")
+    parser.add_argument("--strategy", type=str, default="pretrained_affine")
     parser.add_argument("--model", type=str, default="ConvNet")
     parser.add_argument("--num_rounds", type=int, default=5)
     parser.add_argument("--local_epochs", type=int, default=1)
@@ -128,7 +128,7 @@ def parse_args():
     parser.add_argument("--num_workers", type=int, default=0)
     parser.add_argument("--pin_memory", type=str2bool, default=False)
     parser.add_argument("--persistent_workers", type=str2bool, default=False)
-    parser.add_argument("--results_dir", type=str, default="results")
+    parser.add_argument("--results_dir", type=str, default="outputs/results")
     return parser.parse_args()
 
 

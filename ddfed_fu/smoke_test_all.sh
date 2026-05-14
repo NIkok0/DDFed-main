@@ -124,7 +124,7 @@ python reproduce_single_unlearning.py \
     --env mnist-seed42-u10-alpha0.1 \
     --env_path ../../../../env \
     --data_path ../../../../data \
-    --strategy quickdrop-affine \
+    --strategy pretrained_affine \
     --device cpu \
     --communication_round 2 \
     --local_epoch 1 \

@@ -3,8 +3,8 @@ This folder includes the artifact evaluation required codes and running results.
 We include some running results, which may takes hours if use cpu:
 1. [QuickDrop-ConvNet-cifar10-seed42-u20-alpha0.1-lr_net0.01-lr_img0.1-scale0.01-le5.pth](check_point%2FQuickDrop-ConvNet-cifar10-seed42-u20-alpha0.1-lr_net0.01-lr_img0.1-scale0.01-le5.pth) [CIFAR10 QuickDrop Algorithm]
 2. [QuickDrop-ConvNet-mnist-seed42-u20-alpha0.1-lr_net0.01-lr_img0.1-scale0.01-le5.pth](check_point%2FQuickDrop-ConvNet-mnist-seed42-u20-alpha0.1-lr_net0.01-lr_img0.1-scale0.01-le5.pth)[MNIST QuickDrop Algorithm]
-3. [affine-cifar10-seed42-u20-alpha0.1-scale0.01](..%2Fenv%2Fquickdrop-affine%2Faffine-cifar10-seed42-u20-alpha0.1-scale0.01) [CIFAR10 QuickDrop Algorithm's Affine]
-4. [affine-mnist-seed42-u20-alpha0.1-scale0.01](..%2Fenv%2Fquickdrop-affine%2Faffine-mnist-seed42-u20-alpha0.1-scale0.01) [MNIST QuickDrop Algorithm's Affine]
+3. [affine-cifar10-seed42-u20-alpha0.1-scale0.01](..%2Fenv%2Fpretrained_affine%2Faffine-cifar10-seed42-u20-alpha0.1-scale0.01) [CIFAR10 QuickDrop Algorithm's Affine]
+4. [affine-mnist-seed42-u20-alpha0.1-scale0.01](..%2Fenv%2Fpretrained_affine%2Faffine-mnist-seed42-u20-alpha0.1-scale0.01) [MNIST QuickDrop Algorithm's Affine]
 
 
 It now includes the code to reproduce the similar result and an extensive of Figure 2 in the original paper. These reproductions are folders:

@@ -243,7 +243,7 @@ def _add_quickdrop_args(parser: argparse.ArgumentParser) -> None:
         help="Update local model via synthetic loss directly."
     )
     qd.add_argument(
-        "--affine_path", type=str, default="quickdrop-affine",
+        "--affine_path", type=str, default="pretrained_affine",
         help="Path to save affine dataset results."
     )
     qd.add_argument(
@@ -386,7 +386,7 @@ def build_config(args: argparse.Namespace) -> MethodConfig:
             dis_metric=getattr(args, "dis_metric", "ours"),
             scale=getattr(args, "scale", 0.01),
             directly_update=getattr(args, "directly_update", False),
-            affine_path=getattr(args, "affine_path", "quickdrop-affine"),
+            affine_path=getattr(args, "affine_path", "pretrained_affine"),
             momentum=getattr(args, "momentum", 0.9),
             weight_decay=getattr(args, "weight_decay", 0.001),
             forgetting_epoch=getattr(args, "forgetting_epoch", 0),

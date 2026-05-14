@@ -4,7 +4,7 @@ Supports 5 algorithms:
   - fedsga       : Gradient Ascent on unlearn-set (Baseline 1)
   - neurotoxin   : Neurotoxin backdoor unlearn (Baseline 2)
   - quickdrop    : FedQuickDrop with data distillation (Baseline 3)
-  - ddfu_client  : Proposed 1 – same Neurotoxin formula, all local data
+  - ddfu_client  : Proposed 1 – Neurotoxin unlearning on the forget client's full local data
   - ddfu_sample  : Proposed 2 – half neurotoxin g1 + half FedAvg g2
 """
 
@@ -19,7 +19,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 
 from .config import (
-    UNLEARN_TARGET_CLASS, GAMMA, BETA, DEVICE,
+    UNLEARN_TARGET_CLASS, NT_ALPHA, GAMMA, BETA, DEVICE,
     LOCAL_EPOCHS, BATCH_SIZE,
 )
 
@@ -169,12 +169,12 @@ def neurotoxin_unlearn(model: nn.Module,
         penalty = 0.0
         for i, p in enumerate(cur_params):
             importance = torch.nan_to_num(
-                torch.div(clean_grads[i], bd_grads[i]), nan=0.0, posinf=0.0, neginf=0.0
+                torch.div(clean_grads[i], bd_grads[i]), nan=1e-12, posinf=0.0, neginf=0.0
             )
             penalty += torch.norm(importance * torch.abs(p - orig_params[i]), 1)
 
-        # ---- final loss = clean + γ·backdoor + β·penalty ----
-        unlearn_loss = total_loss + BETA * penalty
+        # ---- final loss = α·(clean + γ·backdoor) + β·penalty ----
+        unlearn_loss = NT_ALPHA * total_loss + BETA * penalty
         model.zero_grad()
         unlearn_loss.backward()
         # manual SGD step
@@ -355,8 +355,8 @@ def ddfu_sample_update(model: nn.Module,
                        backdoor_loader: DataLoader,
                        epochs: int = LOCAL_EPOCHS,
                        lr: float = 0.01) -> nn.Module:
-    """Split data in half: first half → neurotoxin gradient g₁,
-    second half → standard FedAvg gradient g₂, then g = (g₁+g₂)/2."""
+    """Split data in half: first half → neurotoxin averaged gradient g₁,
+    second half → standard FedAvg averaged gradient g₂, then g = (g₁+g₂)/2."""
     dataset = train_loader.dataset
     d1, d2 = split_dataset_half(dataset)
 
@@ -368,7 +368,8 @@ def ddfu_sample_update(model: nn.Module,
     crit = nn.CrossEntropyLoss()
     orig_params = [p.detach().clone() for p in model.parameters() if p.requires_grad]
 
-    # (a) neurotoxin gradients g₁
+    # (a) neurotoxin averaged gradients g₁ (accumulate across epochs)
+    g1_accum = [torch.zeros_like(p) for p in model.parameters() if p.requires_grad]
     model.train()
     for _ in range(epochs):
         b1 = list(loader1)
@@ -388,31 +389,38 @@ def ddfu_sample_update(model: nn.Module,
         cur_p = [p for p in model.parameters() if p.requires_grad]
         penalty = 0.0
         for i, p in enumerate(cur_p):
-            imp = torch.nan_to_num(torch.div(cg[i], bg[i]), nan=0.0, posinf=0.0, neginf=0.0)
+            imp = torch.nan_to_num(torch.div(cg[i], bg[i]), nan=1e-12, posinf=0.0, neginf=0.0)
             penalty += torch.norm(imp * torch.abs(p - orig_params[i]), 1)
 
-        loss = clean_sum + GAMMA * bd_sum + BETA * penalty
+        loss = NT_ALPHA * (clean_sum + GAMMA * bd_sum) + BETA * penalty
         model.zero_grad()
         loss.backward()
-        g1 = [p.grad.detach().clone() for p in model.parameters() if p.requires_grad]
+        for i, p in enumerate(model.parameters()):
+            if p.requires_grad:
+                g1_accum[i] += p.grad.detach().clone()
 
-    # (b) FedAvg gradients g₂ on second half
+    # g1 = average gradient across epochs
+    g1 = [g / epochs for g in g1_accum]
+
+    # (b) FedAvg averaged gradients g₂ on second half
     model2 = copy.deepcopy(model)  # start from same model
     model2.train()
-    opt2 = optim.SGD(model2.parameters(), lr=lr)
+    g2_accum = [torch.zeros_like(p) for p in model2.parameters() if p.requires_grad]
     for _ in range(epochs):
         for x, y in loader2:
             x, y = x.to(DEVICE), y.to(DEVICE)
-            opt2.zero_grad()
+            model2.zero_grad()
             loss = crit(model2(x), y)
             loss.backward()
-            opt2.step()
+            idx = 0
+            for p in model2.parameters():
+                if p.requires_grad:
+                    g2_accum[idx] += p.grad.detach().clone()
+                    idx += 1
 
-    # g₂ = original_params - updated_params (i.e., the negative of the accumulated update)
-    g2 = []
-    for p_orig, p_new in zip(model.parameters(), model2.parameters()):
-        if p_orig.requires_grad:
-            g2.append((p_orig.detach() - p_new.detach()).clone())
+    # g2 = average gradient across all steps
+    total_steps = epochs * len(loader2)
+    g2 = [g / total_steps for g in g2_accum]
 
     # Merge: g = (g₁ + g₂) / 2
     with torch.no_grad():

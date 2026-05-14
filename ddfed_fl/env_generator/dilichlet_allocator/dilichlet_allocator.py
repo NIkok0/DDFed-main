@@ -6,7 +6,7 @@ from torch import Tensor
 sys.path.append('../*')
 
 from env_generator.preprocessing.baselines_dataloader import *
-from env_generator.utils import *
+from utils.common_utils import *
 from utils.fed_utils import *
 
 FIXED_PREFIX = 'dilichlet'

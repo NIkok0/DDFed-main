@@ -128,7 +128,7 @@ if __name__ == '__main__':
     parser.add_argument('--scale', type=float, default=0.01, help='For each class: #dc images = #original images * ratio')
     parser.add_argument('--directly_update', type=bool, default=False, help='True: update local model via synthetic loss/False: recalculate loss on synthetic dataset')
     # Affine dataset parameters:
-    parser.add_argument('--affine_path', type=str, default='quickdrop-affine', help='path to save affine results')
+    parser.add_argument('--affine_path', type=str, default='pretrained_affine', help='path to save affine results')
     # Forgetting parameters
     parser.add_argument('--forgetting_epoch', type=int, default=0, help='FL forgetting epoch')
     parser.add_argument('--forgetting_rate', type=float, default=0., help='Forgetting rate')

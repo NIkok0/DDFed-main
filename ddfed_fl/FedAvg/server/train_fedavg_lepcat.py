@@ -848,7 +848,7 @@ def parse_args():
     parser.add_argument("--device", type=str, default="cuda:0")
     parser.add_argument("--env_path", type=str, default="./env")
     parser.add_argument("--env", type=str, default="affine-mnist-seed42-u20-alpha0.1-scale0.01")
-    parser.add_argument("--strategy", type=str, default="quickdrop-affine")
+    parser.add_argument("--strategy", type=str, default="pretrained_affine")
     parser.add_argument("--data_path", type=str, default="../../data")
     parser.add_argument("--dataset", type=str, default="MNIST")
     parser.add_argument("--model", type=str, default="ConvNet")
@@ -880,8 +880,8 @@ def parse_args():
 
     parser.add_argument("--save_results", type=str2bool, default=True)
     parser.add_argument("--save_figures", type=str2bool, default=True)
-    parser.add_argument("--results_dir", type=str, default="results")
-    parser.add_argument("--figures_dir", type=str, default="figures")
+    parser.add_argument("--results_dir", type=str, default="outputs/results")
+    parser.add_argument("--figures_dir", type=str, default="outputs/figures")
     return parser.parse_args()
 
 

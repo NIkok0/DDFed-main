@@ -70,7 +70,7 @@ if __name__ == '__main__':
     parser.add_argument('--dataset', type=str, default='MNIST', help='dataset')
     parser.add_argument('--model', type=str, default='ConvNet', help='model')
     parser.add_argument('--env_path', type=str, default='../../../env', help='environment path')
-    parser.add_argument('--strategy', type=str, default='quickdrop-affine', help='strategy')
+    parser.add_argument('--strategy', type=str, default='pretrained_affine', help='strategy')
     parser.add_argument('--env', type=str, default='affine-mnist-seed42-u20-alpha0.1-scale0.01', help='SGA env')
     parser.add_argument('--communication_round', type=int, default=200, help='FL communication round') # Disable if with the affine dataset
     parser.add_argument('--checkpoint_path', type=str, default='../../check_point/QuickDrop-ConvNet-mnist-seed42-u20-alpha0.1-lr_net0.01-lr_img0.1-scale0.01-le5.pth', help='Quickdrop Well-trained Checkpoint')
@@ -94,7 +94,7 @@ if __name__ == '__main__':
     parser.add_argument('--scale', type=float, default='0.05', help='For each class: #dc images = #original images * ratio') # Disable if with the affine dataset
     parser.add_argument('--directly_update', type=bool, default=False, help='True: update local model via synthetic loss/False: recalculate loss on synthetic dataset') # Disable if with the affine dataset
     # Affine dataset parameters:
-    parser.add_argument('--affine_path', type=str, default='quickdrop-affine', help='path to save affine results') # Disable if with the affine dataset
+    parser.add_argument('--affine_path', type=str, default='pretrained_affine', help='path to save affine results') # Disable if with the affine dataset
     # Forgetting parameters
     parser.add_argument('--forgetting_epoch', type=int, default=1, help='FL forgetting epoch')
     # parser.add_argument('--forgetting_rate', type=float, default=0.004, help='CIFAR10 Forgetting rate')

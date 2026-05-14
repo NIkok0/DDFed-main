@@ -328,7 +328,7 @@ class QuickDropConfig(BaseFLConfig):
     """
 
     # ── Affine Dataset ───────────────────────────────────────────────────
-    affine_path: str = "quickdrop-affine"
+    affine_path: str = "pretrained_affine"
     """Path to save affine dataset results."""
 
     # ── Optimizer ────────────────────────────────────────────────────────

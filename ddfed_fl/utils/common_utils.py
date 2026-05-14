@@ -52,5 +52,3 @@ def divideXy_to_tensor(data) -> dict:
     tensors['x'] = torch.tensor(Xs, dtype=torch.float32)
     tensors['y'] = torch.tensor(ys, dtype=torch.int64)
     return tensors
-
-

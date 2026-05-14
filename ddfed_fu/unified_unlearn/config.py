@@ -46,6 +46,7 @@ os.makedirs(RESULT_DIR, exist_ok=True)
 os.makedirs(CKPT_DIR,   exist_ok=True)
 
 # ── Neurotoxin coefficients ──────────────────────────────────────
+NT_ALPHA = 1.0   # weight for total_loss (clean + gamma * backdoor)
 GAMMA = 1.0   # weight for backdoor loss
 BETA  = 0.1   # weight for gradient penalty
 

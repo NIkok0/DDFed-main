@@ -422,7 +422,7 @@ def parse_args():
     parser.add_argument("--data_path", type=str, default="../../data")
     parser.add_argument("--dataset", type=str, default="MNIST")
     parser.add_argument("--env_path", type=str, default="./env")
-    parser.add_argument("--strategy", type=str, default="quickdrop-affine")
+    parser.add_argument("--strategy", type=str, default="pretrained_affine")
     parser.add_argument("--env", type=str, default="affine-mnist-seed42-u20-alpha0.1-scale0.01")
     parser.add_argument("--model", type=str, default="ConvNet")
     parser.add_argument("--batch_size", type=int, default=64)

@@ -70,8 +70,8 @@ if __name__ == '__main__':
     parser.add_argument('--data_path', type=str, default='../../data', help='dataset')
     parser.add_argument('--dataset', type=str, default='MNIST', help='dataset')
     parser.add_argument('--env_path', type=str, default=None, help='environment path')
-    parser.add_argument('--strategy', type=str, default='quickdrop-affine', help='strategy')
-    parser.add_argument('--env', type=str, default='affine-mnist-seed42-u20-alpha0.1-scale0.05', help='FL env')
+    parser.add_argument('--strategy', type=str, default='pretrained_affine', help='strategy')
+    parser.add_argument('--env', type=str, default='affine-mnist-seed42-u20-alpha0.1-scale0.01', help='FL env')
     # Training hyperparameters:
     parser.add_argument('--model', type=str, default='ConvNet', help='model')
     parser.add_argument('--communication_round', type=int, default=100, help='FL communication round')
